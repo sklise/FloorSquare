@@ -8,4 +8,9 @@ configure do |c|
   set :scss, :style => :compact
 end
 
+ActiveRecord::Base.establish_connection(
+  :adapter => 'sqlite3',
+  :database => 'development.sqlite.db'
+)
+
 Dir['./app/*/*.rb'].each {|file| require file}
