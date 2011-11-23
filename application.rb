@@ -1,6 +1,6 @@
 require 'bundler'
 Bundler.require
-
+require 'active_record'
 configure do |c|
   enable :sessions
   set :root, File.dirname(__FILE__)
