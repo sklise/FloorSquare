@@ -8,9 +8,6 @@ configure do |c|
   set :scss, :style => :compact
 end
 
-ActiveRecord::Base.establish_connection(
-  :adapter => 'sqlite3',
-  :database => 'development.sqlite.db'
-)
+set :database, 'mysql://root:@localhost/floorsquare'
 
 Dir['./app/*/*.rb'].each {|file| require file}
