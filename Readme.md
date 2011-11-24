@@ -1,12 +1,13 @@
 # Final Project Sketch
 
 To save a new swipe to the database, each device must first register with whoever is in charge of the API to get a device auth_key. The url for the POST request will be of the form: 
-@@http://itp.nyu.edu/floorsquare/DEVICE_KEY/@@
 
-!!! GET from database for App
+    http://itp.nyu.edu/floorsquare/DEVICE_KEY/
 
-@@http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID@@
-@@http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID@@
+### GET from database for App
+
+    http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID
+    http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID
 
 MODELS
 ==========
