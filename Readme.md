@@ -1,13 +1,41 @@
 # Final Project Sketch
 
-To save a new swipe to the database, each device must first register with whoever is in charge of the API to get a device auth_key. The url for the POST request will be of the form: 
+To save a new swipe to the database, each device must first register with whoever is in charge of the API to get a device auth_key. 
 
-    http://itp.nyu.edu/floorsquare/DEVICE_KEY/
 
-### GET from database for App
+ROUTES
+==========
 
-    http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID
-    http://itp.nyu.edu/floorsquare/APP_KEY/user/NETID
+### API Routes
+**Here we define the routes used by Apps and Devices to create and read to and from Floorsquare.**
+
+##### POST Routes
+**Expected behavoir for these routes is for a reading from a Device.**
+
+- POST `/DEVICE_KEY/` The params of the post request will be defined later.
+
+##### GET Routes
+**Expected behavoir for these routes is for presentation and use of individual Apps.**
+
+- GET `/APP_KEY/users/NETID`
+- GET `/APP_KEY/users/`
+- GET `/APP_KEY/date/20111127` 
+- GET `/APP_KEY/`
+
+
+### Admin Routes
+**These routes will be used by the administrators of Floorsquare.**
+
+- GET `/admin`
+- GET `/admin/apps`
+- GET & POST `/admin/apps/new`
+- GET, PUT & DELETE `/admin/apps/ID`
+- GET `/admin/apps/ID/edit`
+- GET `/admin/devices`
+- GET & POST `/admin/devices/new`
+- GET, PUT & DELETE `/admin/devices/ID`
+- GET `/admin/devices/ID/edit`
+
 
 MODELS
 ==========
