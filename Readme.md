@@ -1,3 +1,15 @@
+#### DataMapper setup
+
+1. `$ bundle`
+2. Change `DataMapper.setup()` to your proper file path
+3. Add properties to models just like in `app/models/user.rb`
+4.
+    $ irb
+    > require './application'
+    > DataMapper.auto_migrate! # This will erase the current contents of the db
+    > DataMapper.auto_upgrade! # For adding updates, wont erase the db
+
+
 # Final Project Sketch
 
 To save a new swipe to the database, each device must first register with whoever is in charge of the API to get a device auth_key. 
