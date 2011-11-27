@@ -8,4 +8,6 @@ configure do |c|
   set :scss, :style => :compact
 end
 
+DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/sklise/ITP/Floorsquare/db_dev.sqlite')
+
 Dir['./app/*/*.rb'].each {|file| require file}
