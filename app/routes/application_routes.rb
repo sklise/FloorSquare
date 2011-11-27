@@ -50,6 +50,31 @@ end
 delete '/admin/devices/:id' do
 end
 
+
+post '/swipe/new' do
+	netid = params[:netid]
+	app_id = params[:app_id]
+	device_id = params[:device_id]
+
+	user = User.get(netid)
+	if not user
+		return('get off the floor, yo')
+	
+	else
+		@swipe = Swipe.create()
+		@swipe.netid= netid
+		@swipe.app_id= app_id
+		@swipe.device_id= device_id
+		@swipe.save()
+
+		content_type :json
+	  	return { 'name' => user.name, 'photo' => user.photo }.to_json
+
+	end
+
+
+end
+
 #   SASS
 #---------------------------------------
 

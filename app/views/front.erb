@@ -1,1 +1,20 @@
 <h1>Floorsquare</h1>
+<br>
+<br>
+<br>
+<p>Simulated Swipe</p>
+<form method="POST" action="/swipe/new">
+<input type="text" name="netid" />
+<input type="submit" value="Go" />
+</form>
+
+
+<script>
+$(function() {
+	$("h1").click(function(){ 
+		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1',} );
+		
+	});
+});  //end docready
+
+</script>
