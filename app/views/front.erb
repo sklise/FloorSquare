@@ -14,7 +14,7 @@
 <br>
 <p id="putuser">Put User Skills</p>
 <br>
-<p id="getswipes">Get Swipes that are: checkin &amp; available</p>
+<p id="getswipes">Get Swipes that are: checkin:true;</p>
 <br>
 
 <script>
@@ -22,7 +22,7 @@ var swipeid;
 
 $(function() {
 	$("p#newswipe").click(function(){ 
-		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true}},
+		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true, }},
 		function(data){
 			console.log(data);
 			swipeid=data.swipeid;
@@ -55,7 +55,7 @@ $(function() {
 	});
 
 	$("p#getswipes").click(function(){ 
-		$.get("/swipes/", { app_id: '1', device_id: '1', extra: {available: true}},
+		$.get("/swipes/", { app_id: '2', device_id: '1', extra: {checkin: true, available: true}},
 		function(data){
 			console.log(data);
 

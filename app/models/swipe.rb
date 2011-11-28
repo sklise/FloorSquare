@@ -4,7 +4,7 @@
 # DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/zach/Fall_2012_ITP/Networks/UnderstandingNetworksFall2011/db_dev.sqlite')
 
 
-class Swipe #< DataMapper::Base
+class Swipe
   include DataMapper::Resource
 
   property :id,         Serial  

@@ -127,30 +127,30 @@ end
 get '/swipes/' do
 
 	app_id = params[:app_id]
-	extra = params[:extra]
+	# extra = params[:extra]
 	
 	app_swipes= Swipe.all(:app_id=>app_id)
 
-	matching_swipes = Array.new
+	# matching_swipes = Array.new
 
 	# return app_swipes.length.to_json
 
-	app_swipes.each do |swipe|
-		if swipe.extra
-			if swipe.extra["app_id_"+app_id] == extra
-				matching_swipes.push(swipe)
-			end
-		end
-	end
+	# app_swipes.each do |swipe|
+	# 	if swipe.extra
+	# 		if swipe.extra["app_id_"+app_id.to_s] == extra
+	# 			matching_swipes.push(swipe)
+	# 		end
+	# 	end
+	# end
 
-	# the above doesn't work so
-	matching_swipes= app_swipes
 
-	if matching_swipes.length > 0
-		return matching_swipes.to_json
+	if app_swipes.length > 0
+		return app_swipes.to_json
 	else
 		return 'no swipes found'
 	end
+
+	# Failed attempts to use the built in filtering of datamapper
 
 	# Swipe.all(:extra=>nil)
 	# works
