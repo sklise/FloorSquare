@@ -10,5 +10,5 @@ class User #< DataMapper::Base
   property :created_at, DateTime  
   property :name,		String  
   property :photo,		String  
-  property :extra, 		Json
+  property :extra, 		Json,  :lazy=> false
 end

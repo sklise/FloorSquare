@@ -2,19 +2,36 @@
 <br>
 <br>
 <br>
-<p>Simulated Swipe</p>
+<!-- <p>Simulated Swipe</p>
 <form method="POST" action="/swipe/new">
 <input type="text" name="netid" />
 <input type="submit" value="Go" />
-</form>
+</form> -->
 
+<p id="newswipe">New Swipe</p>
+<p id="putswipe">Put Swipe</p>
 
 <script>
 $(function() {
-	$("h1").click(function(){ 
-		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1',} );
-		
+	$("p#newswipe").click(function(){ 
+		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true}} );
 	});
+
+	$("p#putswipe").click(function(){ 
+
+	$.ajax({
+	  url: "/swipe/22",
+	  context: document.body,
+	  type: 'PUT',
+	  data: { netid: "123", app_id: '1', device_id: '1', extra: {aAAvailable: 'truzze'}},
+	  success: function(){
+	    $(this).addClass("done");
+	  }
+	});
+
+	});
+
+
 });  //end docready
 
 </script>

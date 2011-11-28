@@ -13,6 +13,6 @@ class Swipe #< DataMapper::Base
   property :timestamp, 	DateTime
   property :device_id, 	Integer  
   property :app_id,     Integer
-  property :extra,      Json
+  property :extra,      Json, :lazy=> false
 
 end
