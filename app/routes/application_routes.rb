@@ -12,6 +12,8 @@ get '/admin/apps' do
 end
 
 get '/admin/apps/new' do
+	# We should use datamapper's builtin api key field for this...
+	# https://github.com/datamapper/dm-types/blob/master/lib/dm-types/api_key.rb
 end
 
 post '/admin/apps/new' do
@@ -101,6 +103,70 @@ put '/swipe/:id' do
 	end
 end
 
+put '/user/:netid' do
+	netid = params[:netid]
+	app_id = params[:app_id]
+	extra = params[:extra]
+
+	user = User.get(netid)
+	if not user
+		return('get off the floor, yo!')
+	else
+		if user.extra
+			new_extra= user.extra["app_id_"+app_id].merge(extra)
+			user.extra = {"app_id_"+app_id => new_extra }
+		else
+			user.extra = {"app_id_"+app_id => extra }
+		end
+
+		user.save()
+	  	return user.to_json
+	end
+end
+
+get '/swipes/' do
+
+	app_id = params[:app_id]
+	extra = params[:extra]
+	
+	app_swipes= Swipe.all(:app_id=>app_id)
+
+	matching_swipes = Array.new
+
+	# return app_swipes.length.to_json
+
+	app_swipes.each do |swipe|
+		if swipe.extra
+			if swipe.extra["app_id_"+app_id] == extra
+				matching_swipes.push(swipe)
+			end
+		end
+	end
+
+	# the above doesn't work so
+	matching_swipes= app_swipes
+
+	if matching_swipes.length > 0
+		return matching_swipes.to_json
+	else
+		return 'no swipes found'
+	end
+
+	# Swipe.all(:extra=>nil)
+	# works
+	# Swipe.all(:order => [ :id.desc ], :limit => 20)
+
+	# Swipe.all(:extra => {:app_id => 1})
+	# didn't make an error, also didn't work
+
+	# ex={"app_id_1"=>{"checkin"=>"true"}}
+
+	# Customer.all(Customer.orders.order_lines.item.sku.like => "%BLUE%")
+	# Post.all(:comments => { :user => @user })
+	# Swipe.all(Swipe.extra['app_id_1']['checkin']=>true)
+	# fails
+
+end
 
 
 #   SASS

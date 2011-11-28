@@ -9,27 +9,59 @@
 </form> -->
 
 <p id="newswipe">New Swipe</p>
+<br>
 <p id="putswipe">Put Swipe</p>
+<br>
+<p id="putuser">Put User Skills</p>
+<br>
+<p id="getswipes">Get Swipes that are: checkin &amp; available</p>
+<br>
 
 <script>
+var swipeid;
+
 $(function() {
 	$("p#newswipe").click(function(){ 
-		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true}} );
+		$.post("/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true}},
+		function(data){
+			console.log(data);
+			swipeid=data.swipeid;
+		} );
 	});
 
 	$("p#putswipe").click(function(){ 
-
-	$.ajax({
-	  url: "/swipe/22",
-	  context: document.body,
-	  type: 'PUT',
-	  data: { netid: "123", app_id: '1', device_id: '1', extra: {aAAvailable: 'truzze'}},
-	  success: function(){
-	    $(this).addClass("done");
-	  }
+		$.ajax({
+		  url: "/swipe/"+swipeid,
+		  context: document.body,
+		  type: 'PUT',
+		  data: { netid: "123", app_id: '1', device_id: '1', extra: {available: 'true'}},
+		  success: function(){
+		    $(this).addClass("done");
+		  }
+		});
 	});
 
+
+	$("p#putuser").click(function(){ 
+		$.ajax({
+		  url: "/user/"+"123",
+		  context: document.body,
+		  type: 'PUT',
+		  data: { netid: "123", app_id: '1', device_id: '1', extra: {skills: 'icm, pizza, coolness'}},
+		  success: function(){
+		    $(this).addClass("done");
+		  }
+		});
 	});
+
+	$("p#getswipes").click(function(){ 
+		$.get("/swipes/", { app_id: '1', device_id: '1', extra: {available: true}},
+		function(data){
+			console.log(data);
+
+		} );
+	});	
+
 
 
 });  //end docready

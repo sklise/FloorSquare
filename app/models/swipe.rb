@@ -10,9 +10,10 @@ class Swipe #< DataMapper::Base
   property :id,         Serial  
   property :netid,      String  
   property :credential, String  
-  property :timestamp, 	DateTime
+  property :created_at, DateTime
   property :device_id, 	Integer  
   property :app_id,     Integer
   property :extra,      Json, :lazy=> false
+
 
 end
