@@ -10,24 +10,52 @@ end
 get '/swipes' do
   content_type :json
 
-  search = {}
+  if App.first(:auth_key => params[:app_key]).nil?
+    throw(:halt, [401, "Not Authorized\n"])
+  else
+    search = {}
 
-  # Set search terms in specified in params.
-  search[:created_at.lt] = params[:until] unless params[:until].nil?
-  search[:created_at.gt] = params[:since] unless params[:since].nil?
+    # Set search terms in specified in params.
+    search[:created_at.lt] = params[:until] unless params[:until].nil?
+    search[:created_at.gt] = params[:since] unless params[:since].nil?
 
-  # If no time range is specified, set the limit to 50
-  if search.empty?
-    search[:limit] = 50
+    # If no time range is specified, set the limit to 50
+    if search.empty?
+      search[:limit] = 50
+    end
+
+    # Sort by most recent.
+    search[:order] = [:created_at.desc]
+    # Maybe an app will have more than one device, let them specify which.
+    search[:device_id] = params[:device_id] unless params[:device_id].nil?
+
+    @swipes = Swipe.all(search)
+    @swipes.to_json
   end
+end
 
-  # Sort by most recent.
-  search[:order] = [:created_at.desc]
-  # Maybe an app will have more than one device, let them specify which.
-  search[:device_id] = params[:device_id] unless params[:device_id].nil?
+post '/swipes/new' do
+  @app = App.first(:auth_key => params[:app_key])
 
-  @swipes = Swipe.all(search)
-  @swipes.to_json
+  if @app.nil?
+    throw(:halt, [401, "Not Authorized\n"])
+  else
+    @swipe = Swipe.create({
+      :user_nnumber => params[:user_nnumber],
+      :netid => params[:netid],
+      :credential => params[:credential],
+      :device_id => params[:device_id],
+      :app_id => @app.id,
+      :extra => params[:extra]
+    })
+  end
+  response = ""
+  if @swipe.save
+    response = "success"
+  else
+    response = "failure"
+  end
+  response  
 end
 
 #   MEMBERS
