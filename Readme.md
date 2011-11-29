@@ -36,6 +36,7 @@ API Routes
 #### Swipe
 
 **Path**: '/swipes/new'
+
 **Params**:
 
 Required:
@@ -57,6 +58,7 @@ Optional:
 **Returns swipes matching an app_key. Defaults to the last 50 if no time parameters are specified.**
 
 **Path**: '/swipes'
+
 **Params**:
 
 Required:
