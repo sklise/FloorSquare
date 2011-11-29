@@ -9,6 +9,8 @@ end
 # Get last 50 swipes
 get '/swipes' do
   content_type :json
+  response['Access-Control-Allow-Origin'] = '*'
+
   @app = App.first(:auth_key => params[:app_key])
 
   if @app.nil?
@@ -38,10 +40,13 @@ get '/swipes' do
 end
 
 post '/swipes/new' do
+  content_type :json
+  response['Access-Control-Allow-Origin'] = '*'
+
   @app = App.first(:auth_key => params[:app_key])
 
   if @app.nil?
-    throw(:halt, [401, "Not Authorized\n"])
+    throw(:halt, [401, "Not Authorized\nMust provide a valid app_key."])
   else
     @swipe = Swipe.create({
       :user_nnumber => params[:user_nnumber],
@@ -49,16 +54,19 @@ post '/swipes/new' do
       :credential => params[:credential],
       :device_id => params[:device_id],
       :app_id => @app.id,
-      :extra => params[:extra]
+      :extra => {"app_id_"+app_id => params[:extra] }
     })
   end
-  response = ""
+
   if @swipe.save
-    response = "success"
+    @user = User.first_or_create(@swipe.user_nnumber)
+    extra= @user.extra[ "app_id_"+ app_id.to_s ]
+    data= { :name => @user.name, :photo => @user.photo, :extra => extra, :swipeid=> @swipe.id}
+    # return JSONP data
+    return data.to_json
   else
-    response = "failure"
+    return "error"
   end
-  response  
 end
 
 #   MEMBERS
@@ -87,8 +95,8 @@ get '/admin/apps' do
 end
 
 get '/admin/apps/new' do
-	# We should use datamapper's builtin api key field for this...
-	# https://github.com/datamapper/dm-types/blob/master/lib/dm-types/api_key.rb
+  # We should use datamapper's builtin api key field for this...
+  # https://github.com/datamapper/dm-types/blob/master/lib/dm-types/api_key.rb
 end
 
 post '/admin/apps/new' do
@@ -127,109 +135,59 @@ end
 delete '/admin/devices/:id' do
 end
 
-# this should be a post
-post '/swipe/new' do
-	nnumber = params[:nnumber]
-	app_id = params[:app_id]
-	device_id = params[:device_id]
-	extra = params[:extra]
-
-	user = User.get(nnumber)
-	if not user
-		return('get off the floor, yo!')
-	
-	else
-		@swipe = Swipe.create()
-		# @swipe.netid= netid
-		@swipe.app_id= app_id
-		@swipe.device_id= device_id
-		@swipe.extra= {"app_id_"+app_id => extra }
-		@swipe.save()
-
-		extra= user.extra[ "app_id_"+ app_id.to_s ]
-		# content_type :json
-	  	data= { :name => user.name, :photo => user.photo, :extra => extra, :swipeid=> @swipe.id}
-		
-		response['Access-Control-Allow-Origin'] = '*'
-
-	  	# return JSONP data
-	  	return data.to_json
-	end
-end
-
 # Allows extra data to be added to a swipe, after the swipe occurs. Makes sense from a user perspective (swipe first, then do something)
 post '/swipe/:id' do
-	nnumber = params[:nnumber]
-	app_id = params[:app_id]
-	extra = params[:extra]
-	id = params[:id]
+  nnumber = params[:nnumber]
+  app_id = params[:app_id]
+  extra = params[:extra]
+  id = params[:id]
 
-	user = User.get(nnumber)
-	if not user
-		return('get off the floor, yo!')
-	
-	else
-		swipe = Swipe.get(id)
-		if swipe.extra
-			new_extra= swipe.extra["app_id_"+app_id].merge(extra)
-			swipe.extra = {"app_id_"+app_id => new_extra }
+  user = User.get(nnumber)
+  if not user
+    return('get off the floor, yo!')
+  
+  else
+    swipe = Swipe.get(id)
+    if swipe.extra
+      new_extra= swipe.extra["app_id_"+app_id].merge(extra)
+      swipe.extra = {"app_id_"+app_id => new_extra }
 
-		else
-			swipe.extra = {"app_id_"+app_id => extra }
-		end
+    else
+      swipe.extra = {"app_id_"+app_id => extra }
+    end
 
-		swipe.save()
-		response['Access-Control-Allow-Origin'] = '*'
-	  	return swipe.to_json
-	end
+    swipe.save()
+    response['Access-Control-Allow-Origin'] = '*'
+      return swipe.to_json
+  end
 end
 
 
 post '/user/:netid' do
-	response['Access-Control-Allow-Origin'] = '*'
+  response['Access-Control-Allow-Origin'] = '*'
 
-	netid = params[:netid]
-	app_id = params[:app_id]
-	extra = params[:extra]
+  netid = params[:netid]
+  app_id = params[:app_id]
+  extra = params[:extra]
 
-	user = User.get(netid)
-	if not user
-		response['Access-Control-Allow-Origin'] = '*'
-		return('get off the floor, yo!')
-	else
-		if user.extra
-			new_extra= user.extra["app_id_"+app_id].merge(extra)
-			user.extra = {"app_id_"+app_id => new_extra }
-		else
-			user.extra = {"app_id_"+app_id => extra }
-		end
+  user = User.get(netid)
+  if not user
+    response['Access-Control-Allow-Origin'] = '*'
+    return('get off the floor, yo!')
+  else
+    if user.extra
+      new_extra= user.extra["app_id_"+app_id].merge(extra)
+      user.extra = {"app_id_"+app_id => new_extra }
+    else
+      user.extra = {"app_id_"+app_id => extra }
+    end
 
-		user.save()
+    user.save()
 
-		response['Access-Control-Allow-Origin'] = '*'
-	  	return user.to_json
-	end
+    response['Access-Control-Allow-Origin'] = '*'
+      return user.to_json
+  end
 end
-
-get '/swipes/' do
-
-	app_id = params[:app_id]
-	# extra = params[:extra]
-	
-	app_swipes= Swipe.all(:app_id=>app_id)
-
-
-	response['Access-Control-Allow-Origin'] = '*'
-
-	if app_swipes.length > 0
-		return app_swipes.to_json
-	else
-		return 'no swipes found'
-	end
-
-
-end
-
 
 #   SASS
 #---------------------------------------
