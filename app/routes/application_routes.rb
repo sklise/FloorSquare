@@ -42,7 +42,7 @@ post '/swipes/new/?' do
 
   puts params.inspect
   @app = App.first(:auth_key => params[:app_key])
-  # validate_app_key @app
+  validate_app_key @app
 
   @swipe = Swipe.new
   @swipe.user_nnumber = params[:user_nnumber]
@@ -50,7 +50,7 @@ post '/swipes/new/?' do
   @swipe.credential = params[:credential]
   @swipe.device_id = params[:device_id]
   @swipe.app_id = @app.id
-  @swipe.extra = {"app_id_"+@app.id => params[:extra] }
+  @swipe.extra = {"app_id_"+@app.id.to_s => params[:extra] }
 
   if @swipe.save
     @user = User.first_or_create(@swipe.user_nnumber)
