@@ -145,7 +145,7 @@ get '/members/:nnumber/swipes' do
   validate_app_key @app
 
   @user = User.get(params[:nnumber])
-  if not user
+  if not @user
     response['Access-Control-Allow-Origin'] = '*'
     throw(:halt, [404, "Member not found\n"])
   else
