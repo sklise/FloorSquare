@@ -6,10 +6,12 @@ class Swipe
   property :nnumber,      Integer
   property :netid,        String  
   property :credential,   String  
-  property :created_at,   DateTime
   property :device_id,    Integer
   property :app_id,       Integer
   property :extra,        Json, :lazy=> false
 
+  timestamps :created_at, :updated_on
+
   belongs_to :user
+  belongs_to :app
 end
