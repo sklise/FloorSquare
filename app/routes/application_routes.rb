@@ -82,11 +82,12 @@ post '/swipes/:id' do
 
   extra = params[:extra]
 
-  if @swipe.extra
-    new_extra = @swipe.extra["app_id_"+app_id].merge(extra)
-    @swipe.extra = {"app_id_"+app_id => new_extra }
+  extra ||= {}
+  if @swipe.extra["app_id_#{@app.id}"]
+    new_extra = @swipe.extra["app_id_#{@app.id}"].merge(extra)
+    @swipe.extra = {"app_id_#{@app.id}" => new_extra }
   else
-    swipe.extra = {"app_id_"+app_id => extra }
+    @swipe.extra = {"app_id_#{@app.id}" => extra }
   end
 
   if @swipe.save()
@@ -117,20 +118,20 @@ get '/members/:nnumber' do
 
   extra = params[:extra]
 
-  if not user
+  if not @user
     response['Access-Control-Allow-Origin'] = '*'
     throw(:halt, [404, "Member not found\n"])
   else
     if @user.extra
-      new_extra= user.extra["app_id_"+@app.id].merge(extra)
-      @user.extra = {"app_id_"+@app.id => new_extra }
+      new_extra= @user.extra["app_id_#{@app.id}"].merge(extra)
+      @user.extra = {"app_id_#{@app.id}" => new_extra }
     else
-      @user.extra = {"app_id_"+@app.id => extra }
+      @user.extra = {"app_id_#{@app.id}" => extra }
     end
 
     if @user.save()
       response['Access-Control-Allow-Origin'] = '*'
-      return user.to_json
+      return @user.to_json
     else
       response['Access-Control-Allow-Origin'] = '*'
       throw(:halt, [500, "Error saving User\n"])
