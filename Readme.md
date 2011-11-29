@@ -43,20 +43,21 @@ API Routes
 
 #### Swipe
 
-- Path: '/swipes/new'
-- Params:
+**Path**: '/swipes/new'
 
-    Required:
+**Params**:
 
-    - user_nnumber=99999999 (no N)
-    - device_id=INTEGER
-    - app_key=UNIQUE_SECRET_KEY
+Required:
 
-    Optional:
+- user_nnumber=99999999 (no N)
+- device_id=INTEGER
+- app_key=UNIQUE_SECRET_KEY
 
-    - netid=STRING
-    - credential=STRING (other reading from device)
-    - extra=JSON (big json field for additional info)
+Optional:
+
+- netid=STRING
+- credential=STRING (other reading from device)
+- extra=JSON (big json field for additional info)
 
 ### GET Routes
 **Expected behavoir for these routes is for presentation and use of individual Apps.**
@@ -64,18 +65,19 @@ API Routes
 #### Swipe
 **Returns swipes matching an app_key. Defaults to the last 50 if no time parameters are specified.**
 
-- Path: '/swipes'
-- Params:
+**Path**: '/swipes'
 
-    Required:
+**Params**:
 
-    - app_key=UNIQUE_SECRET_KEY
+Required:
 
-    Optional:
+- app_key=UNIQUE_SECRET_KEY
 
-    - until=YYYY-MM-DD
-    - since=YYYY-MM-DD
-    - device_id=INTEGER
+Optional:
+
+- until=YYYY-MM-DD
+- since=YYYY-MM-DD
+- device_id=INTEGER
 
 
 ### Admin Routes
