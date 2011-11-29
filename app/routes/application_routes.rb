@@ -11,52 +11,46 @@ get '/swipes/?' do
   content_type :json
 
   @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
 
-  if @app.nil?
-    throw(:halt, [401, "Not Authorized\n"])
-  else
-    search = {}
+  search = {}
 
-    # Set search terms in specified in params.
-    search[:created_at.lt] = params[:until] unless params[:until].nil?
-    search[:created_at.gt] = params[:since] unless params[:since].nil?
+  # Set search terms in specified in params.
+  search[:created_at.lt] = params[:until] unless params[:until].nil?
+  search[:created_at.gt] = params[:since] unless params[:since].nil?
 
-    # If no time range is specified, set the limit to 50
-    if search.empty?
-      search[:limit] = 50
-    end
-
-    # Only get swipes from matching app
-    search[:app_id] = @app.id
-    # Sort by most recent.
-    search[:order] = [:created_at.desc]
-    # Maybe an app will have more than one device, let them specify which.
-    search[:device_id] = params[:device_id] unless params[:device_id].nil?
-
-    @swipes = Swipe.all(search)
-    response['Access-Control-Allow-Origin'] = '*'
-    return @swipes.to_json
+  # If no time range is specified, set the limit to 50
+  if search.empty?
+    search[:limit] = 50
   end
+
+  # Only get swipes from matching app
+  search[:app_id] = @app.id
+  # Sort by most recent.
+  search[:order] = [:created_at.desc]
+  # Maybe an app will have more than one device, let them specify which.
+  search[:device_id] = params[:device_id] unless params[:device_id].nil?
+
+  @swipes = Swipe.all(search)
+  response['Access-Control-Allow-Origin'] = '*'
+  return @swipes.to_json
 end
 
-post '/swipes/new' do
+post '/swipes/new/?' do
   content_type :json
   response['Access-Control-Allow-Origin'] = '*'
 
   @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
 
-  if @app.nil?
-    throw(:halt, [401, "Not Authorized\nMust provide a valid app_key."])
-  else
-    @swipe = Swipe.create({
-      :user_nnumber => params[:user_nnumber],
-      :netid => params[:netid],
-      :credential => params[:credential],
-      :device_id => params[:device_id],
-      :app_id => @app.id,
-      :extra => {"app_id_"+app_id => params[:extra] }
-    })
-  end
+  @swipe = Swipe.create({
+    :user_nnumber => params[:user_nnumber],
+    :netid => params[:netid],
+    :credential => params[:credential],
+    :device_id => params[:device_id],
+    :app_id => @app.id,
+    :extra => {"app_id_"+app_id => params[:extra] }
+  })
 
   if @swipe.save
     @user = User.first_or_create(@swipe.user_nnumber)
@@ -65,7 +59,34 @@ post '/swipes/new' do
     # return JSONP data
     return data.to_json
   else
-    return "error"
+    throw(:halt, [500, "Error saving item\n"])
+  end
+end
+
+# Allows extra data to be added to a swipe, after the swipe occurs.
+# Makes sense from a user perspective (swipe first, then do something)
+post '/swipes/:id' do
+
+  @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
+
+  @swipe = Swipe.get(params[:id])
+
+  extra = params[:extra]
+
+  if @swipe.extra
+    new_extra = @swipe.extra["app_id_"+app_id].merge(extra)
+    @swipe.extra = {"app_id_"+app_id => new_extra }
+  else
+    swipe.extra = {"app_id_"+app_id => extra }
+  end
+
+  if @swipe.save()
+    response['Access-Control-Allow-Origin'] = '*'
+    return @swipe.to_json
+  else
+    response['Access-Control-Allow-Origin'] = '*'
+    throw(:halt, [500, "Error saving item\n"])
   end
 end
 
@@ -134,34 +155,6 @@ end
 
 delete '/admin/devices/:id' do
 end
-
-# Allows extra data to be added to a swipe, after the swipe occurs. Makes sense from a user perspective (swipe first, then do something)
-post '/swipe/:id' do
-  nnumber = params[:nnumber]
-  app_id = params[:app_id]
-  extra = params[:extra]
-  id = params[:id]
-
-  user = User.get(nnumber)
-  if not user
-    return('get off the floor, yo!')
-  
-  else
-    swipe = Swipe.get(id)
-    if swipe.extra
-      new_extra= swipe.extra["app_id_"+app_id].merge(extra)
-      swipe.extra = {"app_id_"+app_id => new_extra }
-
-    else
-      swipe.extra = {"app_id_"+app_id => extra }
-    end
-
-    swipe.save()
-    response['Access-Control-Allow-Origin'] = '*'
-      return swipe.to_json
-  end
-end
-
 
 post '/user/:netid' do
   response['Access-Control-Allow-Origin'] = '*'
