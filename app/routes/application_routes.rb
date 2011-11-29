@@ -42,7 +42,7 @@ post '/swipes/new/?' do
 
   puts params.inspect
   @app = App.first(:auth_key => params[:app_key])
-  # validate_app_key @app
+  validate_app_key @app
 
   @swipe = Swipe.new
   @swipe.user_nnumber = params[:user_nnumber]
@@ -54,8 +54,8 @@ post '/swipes/new/?' do
 
   if @swipe.save
     @user = User.first_or_create(@swipe.user_nnumber)
-    extra= @user.extra[ "app_id_"+ @app.id.to_s ]
-    data= { :name => @user.name, :photo => @user.photo, :extra => extra, :swipeid=> @swipe.id}
+    extra = @user.extra[ "app_id_"+ @app.id.to_s ]
+    data = { :name => @user.name, :photo => @user.photo, :extra => extra, :swipeid=> @swipe.id}
     # return JSONP data
     return data.to_json
   else
