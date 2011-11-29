@@ -22,7 +22,7 @@
 
 var swipeid;
 // var url = "http://localhost:9292"
-var url = "http://127.0.0.1:9292"
+// var url = "http://127.0.0.1:9292"
 var url = ""
 
 $(function() {
@@ -30,7 +30,7 @@ $(function() {
 var swipe_data ={ nnumber: "123", app_id: '1', device_id: '1', extra: {checkin: true, }};
 
 	$("p#newswipe").click(function(){ 
-		$.post("http://localhost:9292/swipe/new", { nnumber: "123", app_id: '1', device_id: '1', extra: {checkin: true, }},
+		$.post(url+"/swipe/new", { nnumber: "123", app_id: '1', device_id: '1', extra: {checkin: true, }},
 		function(data){
 			odata = jQuery.parseJSON(data);
 			console.log(odata);
