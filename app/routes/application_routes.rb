@@ -50,7 +50,7 @@ post '/swipes/new/?' do
   @swipe.credential = params[:credential]
   @swipe.device_id = params[:device_id]
   @swipe.app_id = @app.id
-  @swipe.extra = {"app_id_"+app_id => params[:extra] }
+  @swipe.extra = {"app_id_"+@app.id => params[:extra] }
 
   if @swipe.save
     @user = User.first_or_create(@swipe.user_nnumber)
