@@ -43,14 +43,14 @@ post '/swipes/new/?' do
   @app = App.first(:auth_key => params[:app_key])
   validate_app_key @app
 
-  @swipe = Swipe.create({
-    :user_nnumber => params[:user_nnumber],
-    :netid => params[:netid],
-    :credential => params[:credential],
-    :device_id => params[:device_id],
-    :app_id => @app.id,
-    :extra => {"app_id_"+app_id => params[:extra] }
-  })
+  @swipe = Swipe.new
+  @swipe.update_attributes({
+  @swipe.user_nnumber = params[:user_nnumber]
+  @swipe.netid = params[:netid]
+  @swipe.credential = params[:credential]
+  @swipe.device_id = params[:device_id]
+  @swipe.app_id = @app.id
+  @swipe.extra = {"app_id_"+app_id => params[:extra] }
 
   if @swipe.save
     @user = User.first_or_create(@swipe.user_nnumber)
