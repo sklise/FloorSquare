@@ -95,15 +95,54 @@ end
 
 # Get all users associated with this app
 get '/members' do
-  
+  @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
+  # This is a complicated relation that we don't currently have.
 end
 
 # Get a specific member
-get '/members/:user_id' do
+get '/members/:nnumber' do
+  @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
+
+  @user = User.get(params[:nnumber])
+
+  extra = params[:extra]
+
+  if not user
+    response['Access-Control-Allow-Origin'] = '*'
+    throw(:halt, [404, "Member not found\n"])
+  else
+    if @user.extra
+      new_extra= user.extra["app_id_"+@app.id].merge(extra)
+      @user.extra = {"app_id_"+@app.id => new_extra }
+    else
+      @user.extra = {"app_id_"+@app.id => extra }
+    end
+
+    if @user.save()
+      response['Access-Control-Allow-Origin'] = '*'
+      return user.to_json
+    else
+      response['Access-Control-Allow-Origin'] = '*'
+      throw(:halt, [500, "Error saving User\n"])
+    end
+  end
 end
 
 # Get the swipes belonging to a member
-get '/members/:user_id/swipes' do
+get '/members/:nnumber/swipes' do
+  @app = App.first(:auth_key => params[:app_key])
+  validate_app_key @app
+
+  @user = User.get(params[:nnumber])
+  if not user
+    response['Access-Control-Allow-Origin'] = '*'
+    throw(:halt, [404, "Member not found\n"])
+  else
+    response['Access-Control-Allow-Origin'] = '*'
+    return @user.swipes.to_json
+  end
 end
 
 #   ADMIN
@@ -154,32 +193,6 @@ put '/admin/devices/:id' do
 end
 
 delete '/admin/devices/:id' do
-end
-
-post '/user/:netid' do
-  response['Access-Control-Allow-Origin'] = '*'
-
-  netid = params[:netid]
-  app_id = params[:app_id]
-  extra = params[:extra]
-
-  user = User.get(netid)
-  if not user
-    response['Access-Control-Allow-Origin'] = '*'
-    return('get off the floor, yo!')
-  else
-    if user.extra
-      new_extra= user.extra["app_id_"+app_id].merge(extra)
-      user.extra = {"app_id_"+app_id => new_extra }
-    else
-      user.extra = {"app_id_"+app_id => extra }
-    end
-
-    user.save()
-
-    response['Access-Control-Allow-Origin'] = '*'
-      return user.to_json
-  end
 end
 
 #   SASS
