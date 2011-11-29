@@ -9,8 +9,9 @@ end
 # Get last 50 swipes
 get '/swipes' do
   content_type :json
+  @app = App.first(:auth_key => params[:app_key])
 
-  if App.first(:auth_key => params[:app_key]).nil?
+  if @app.nil?
     throw(:halt, [401, "Not Authorized\n"])
   else
     search = {}
@@ -24,6 +25,8 @@ get '/swipes' do
       search[:limit] = 50
     end
 
+    # Only get swipes from matching app
+    search[:app_id] = @app.id
     # Sort by most recent.
     search[:order] = [:created_at.desc]
     # Maybe an app will have more than one device, let them specify which.
