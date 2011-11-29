@@ -1,10 +1,6 @@
 require 'bundler'
 Bundler.require
 
-# require 'sinatra'
-# require 'sinatra/cross_origin'
-
-
 configure do |c|
   enable :sessions
   set :root, File.dirname(__FILE__)
@@ -15,11 +11,11 @@ configure do |c|
 
   set :allow_origin, :any
 
-
 end
 
-# DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/sklise/ITP/floorsquare/db_dev.sqlite')
-DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/zach/Fall_2012_ITP/Networks/UnderstandingNetworksFall2011/
-db_dev.sqlite')
+DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/sklise/ITP/floorsquare/db_dev.sqlite')
+# DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/zach/Fall_2012_ITP/Networks/UnderstandingNetworksFall2011/
+# db_dev.sqlite')
 
+require './helpers'
 Dir['./app/*/*.rb'].each {|file| require file}
