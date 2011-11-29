@@ -50,12 +50,21 @@ post '/swipes/new/?' do
   @swipe.credential = params[:credential]
   @swipe.device_id = params[:device_id]
   @swipe.app_id = @app.id
-  @swipe.extra = {"app_id_"+@app.id.to_s => params[:extra] }
+  @swipe.extra = {"app_id_#{@app.id}" => params[:extra] }
 
   if @swipe.save
-    @user = User.first_or_create(@swipe.user_nnumber)
-    extra = @user.extra[ "app_id_"+ @app.id.to_s ]
-    data = { :name => @user.name, :photo => @user.photo, :extra => extra, :swipeid=> @swipe.id}
+    @user = User.first(@swipe.user_nnumber)
+    if not @user
+      @user = User.new
+      @user.nnumber = @swipe.user_nnumber
+    end
+    @user.extra ||= {}
+    data = {
+      :name => @user.name,
+      :photo => @user.photo,
+      :extra => @user.extra["app_id_#{@app.id}"],
+      :swipeid=> @swipe.id
+    }
     # return JSONP data
     return data.to_json
   else
@@ -66,7 +75,6 @@ end
 # Allows extra data to be added to a swipe, after the swipe occurs.
 # Makes sense from a user perspective (swipe first, then do something)
 post '/swipes/:id' do
-
   @app = App.first(:auth_key => params[:app_key])
   validate_app_key @app
 
