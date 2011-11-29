@@ -4,7 +4,7 @@
 <br>
 <!-- <p>Simulated Swipe</p>
 <form method="POST" action="/swipe/new">
-<input type="text" name="netid" />
+<input type="text" name="nnumber" />
 <input type="submit" value="Go" />
 </form> -->
 
@@ -27,10 +27,10 @@ var url = ""
 
 $(function() {
 
-var swipe_data ={ netid: "123", app_id: '1', device_id: '1', extra: {checkin: true, }};
+var swipe_data ={ nnumber: "123", app_id: '1', device_id: '1', extra: {checkin: true, }};
 
 	$("p#newswipe").click(function(){ 
-		$.post("http://localhost:9292/swipe/new", { netid: "123", app_id: '1', device_id: '1', extra: {checkin: true, }},
+		$.post("http://localhost:9292/swipe/new", { nnumber: "123", app_id: '1', device_id: '1', extra: {checkin: true, }},
 		function(data){
 			odata = jQuery.parseJSON(data);
 			console.log(odata);
@@ -48,7 +48,7 @@ var swipe_data ={ netid: "123", app_id: '1', device_id: '1', extra: {checkin: tr
 		  type: 'POST',
 		  crossDomain: true,
 
-		  data: { netid: "123", app_id: '1', device_id: '1', extra: {available: 'true'}},
+		  data: { nnumber: "123", app_id: '1', device_id: '1', extra: {available: 'true'}},
 		  success: function(){
 		    $(this).addClass("done");
 		  }
@@ -63,7 +63,7 @@ var swipe_data ={ netid: "123", app_id: '1', device_id: '1', extra: {checkin: tr
 		  type: 'POST',
   		  crossDomain: true,
 
-		  data: { netid: "123", app_id: '1', device_id: '1', extra: {skills: 'icm, pizza, coolness'}},
+		  data: { nnumber: "123", app_id: '1', device_id: '1', extra: {skills: 'icm, pizza, coolness'}},
 		  success: function(){
 		    $(this).addClass("done");
 		  }
