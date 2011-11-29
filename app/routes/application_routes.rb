@@ -44,7 +44,6 @@ post '/swipes/new/?' do
   validate_app_key @app
 
   @swipe = Swipe.new
-  @swipe.update_attributes({
   @swipe.user_nnumber = params[:user_nnumber]
   @swipe.netid = params[:netid]
   @swipe.credential = params[:credential]
