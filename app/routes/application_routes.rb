@@ -7,7 +7,7 @@ end
 #---------------------------------------
 
 # Get last 50 swipes
-get '/swipes' do
+get '/swipes/?' do
   content_type :json
   response['Access-Control-Allow-Origin'] = '*'
 
