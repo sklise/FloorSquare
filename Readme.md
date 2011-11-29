@@ -1,38 +1,73 @@
+# Floorsquare
+
+Installation
+------------
+
 #### DataMapper setup
 
-1. `$ bundle`
-2. Change `DataMapper.setup()` to your proper file path
-3. Add properties to models just like in `app/models/user.rb`
-4.
-    $ irb
-    > require './application'
-    > DataMapper.auto_migrate! # This will erase the current contents of the db
-    > DataMapper.auto_upgrade! # For adding updates, wont erase the db
+1. Be sure bundler is installed `$ sudo gem install bundler`
+2. `$ bundle --without production`
+3. Change `DataMapper.setup()` to your proper file path
+4. Add properties to models just like in `app/models/user.rb`
+5. Create the database
 
+        $ irb
+        > require './application'
+        > DataMapper.auto_migrate! # This will erase the current contents of the db
+        > DataMapper.auto_upgrade! # For adding updates, wont erase the db
+TODO: Make this a rake task.
 
-# Final Project Sketch
+## Final Project Sketch
 
 To save a new swipe to the database, each device must first register with whoever is in charge of the API to get a device auth_key. 
 
 
-ROUTES
-==========
-
-### API Routes
+API Routes
+----------
 **Here we define the routes used by Apps and Devices to create and read to and from Floorsquare.**
 
-##### POST Routes
+- Host: http://www.itpirl.com
+- IP: 75.101.163.44
+- Port: 80
+
+### POST Routes
 **Expected behavoir for these routes is for a reading from a Device.**
 
-- POST `/DEVICE_KEY/` The params of the post request will be defined later.
+#### Swipe
 
-##### GET Routes
+- Path: '/swipes/new'
+- Params:
+
+    Required:
+
+    - user_nnumber=99999999 (no N)
+    - device_id=INTEGER
+    - app_key=UNIQUE_SECRET_KEY
+
+    Optional:
+
+    - netid=STRING
+    - credential=STRING (other reading from device)
+    - extra=JSON (big json field for additional info)
+
+### GET Routes
 **Expected behavoir for these routes is for presentation and use of individual Apps.**
 
-- GET `/APP_KEY/users/NETID`
-- GET `/APP_KEY/users/`
-- GET `/APP_KEY/date/20111127` 
-- GET `/APP_KEY/`
+#### Swipe
+**Returns swipes matching an app_key. Defaults to the last 50 if no time parameters are specified.**
+
+- Path: '/swipes'
+- Params:
+
+    Required:
+
+    - app_key=UNIQUE_SECRET_KEY
+
+    Optional:
+
+    - until=YYYY-MM-DD
+    - since=YYYY-MM-DD
+    - device_id=INTEGER
 
 
 ### Admin Routes
