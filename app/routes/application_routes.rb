@@ -40,6 +40,7 @@ post '/swipes/new/?' do
   content_type :json
   response['Access-Control-Allow-Origin'] = '*'
 
+  puts params.inspect
   @app = App.first(:auth_key => params[:app_key])
   # validate_app_key @app
 
