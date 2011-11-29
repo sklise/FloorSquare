@@ -9,7 +9,6 @@ end
 # Get last 50 swipes
 get '/swipes/?' do
   content_type :json
-  response['Access-Control-Allow-Origin'] = '*'
 
   @app = App.first(:auth_key => params[:app_key])
 
@@ -35,7 +34,8 @@ get '/swipes/?' do
     search[:device_id] = params[:device_id] unless params[:device_id].nil?
 
     @swipes = Swipe.all(search)
-    @swipes.to_json
+    response['Access-Control-Allow-Origin'] = '*'
+    return @swipes.to_json
   end
 end
 
