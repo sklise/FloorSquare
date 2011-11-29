@@ -2,6 +2,49 @@ get '/' do
   erb :front
 end
 
+#   SWIPES
+#---------------------------------------
+
+# Get last 50 swipes
+get '/swipes' do
+  content_type :json
+
+  search = {}
+
+  # Set search terms in specified in params.
+  search[:created_at.lt] = params[:until] unless params[:until].nil?
+  search[:created_at.gt] = params[:since] unless params[:since].nil?
+
+  # If no time range is specified, set the limit to 50
+  if search.empty?
+    search[:limit] = 50
+  end
+
+  # Sort by most recent.
+  search[:order] = [:created_at.desc]
+  # Maybe an app will have more than one device, let them specify which.
+  search[:device_id] = params[:device_id] unless params[:device_id].nil?
+
+  @swipes = Swipe.all(search)
+  @swipes.to_json
+end
+
+#   MEMBERS
+#---------------------------------------
+
+# Get all users associated with this app
+get '/members' do
+  
+end
+
+# Get a specific member
+get '/members/:user_id' do
+end
+
+# Get the swipes belonging to a member
+get '/members/:user_id/swipes' do
+end
+
 #   ADMIN
 #---------------------------------------
 
