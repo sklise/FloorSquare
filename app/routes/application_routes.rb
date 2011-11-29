@@ -126,26 +126,26 @@ end
 
 # this should be a post
 post '/swipe/new' do
-	netid = params[:netid]
+	nnumber = params[:nnumber]
 	app_id = params[:app_id]
 	device_id = params[:device_id]
 	extra = params[:extra]
 
-	user = User.get(netid)
+	user = User.get(nnumber)
 	if not user
 		return('get off the floor, yo!')
 	
 	else
 		@swipe = Swipe.create()
-		@swipe.netid= netid
+		# @swipe.netid= netid
 		@swipe.app_id= app_id
 		@swipe.device_id= device_id
 		@swipe.extra= {"app_id_"+app_id => extra }
 		@swipe.save()
 
-		extra= user.extra["app_id_"+app_id]
+		extra= user.extra[ "app_id_"+ app_id.to_s ]
 		# content_type :json
-	  	data= { :name => user.name, :photo => user.photo, :netid => netid, :extra => extra, :swipeid=> @swipe.id}
+	  	data= { :name => user.name, :photo => user.photo, :extra => extra, :swipeid=> @swipe.id}
 		
 		response['Access-Control-Allow-Origin'] = '*'
 
@@ -156,12 +156,12 @@ end
 
 # Allows extra data to be added to a swipe, after the swipe occurs. Makes sense from a user perspective (swipe first, then do something)
 post '/swipe/:id' do
-	netid = params[:netid]
+	nnumber = params[:nnumber]
 	app_id = params[:app_id]
 	extra = params[:extra]
 	id = params[:id]
 
-	user = User.get(netid)
+	user = User.get(nnumber)
 	if not user
 		return('get off the floor, yo!')
 	

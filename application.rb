@@ -18,6 +18,8 @@ configure do |c|
 
 end
 
-DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/sklise/ITP/floorsquare/db_dev.sqlite')
+# DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/sklise/ITP/floorsquare/db_dev.sqlite')
+DataMapper.setup(:default, ENV['DATABASE_URL'] || 'sqlite:///Users/zach/Fall_2012_ITP/Networks/UnderstandingNetworksFall2011/
+db_dev.sqlite')
 
 Dir['./app/*/*.rb'].each {|file| require file}
