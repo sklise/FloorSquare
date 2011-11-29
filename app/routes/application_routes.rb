@@ -41,7 +41,7 @@ post '/swipes/new/?' do
   response['Access-Control-Allow-Origin'] = '*'
 
   @app = App.first(:auth_key => params[:app_key])
-  validate_app_key @app
+  # validate_app_key @app
 
   @swipe = Swipe.new
   @swipe.user_nnumber = params[:user_nnumber]
