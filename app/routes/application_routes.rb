@@ -1,4 +1,5 @@
 get '/' do
+  response['Access-Control-Allow-Origin'] = '*'
   erb :front
 end
 
@@ -52,7 +53,7 @@ end
 delete '/admin/devices/:id' do
 end
 
-
+# this should be a post
 post '/swipe/new' do
 	netid = params[:netid]
 	app_id = params[:app_id]
@@ -72,13 +73,18 @@ post '/swipe/new' do
 		@swipe.save()
 
 		extra= user.extra["app_id_"+app_id]
-		content_type :json
-	  	return { :name => user.name, :photo => user.photo, :netid => netid, :extra => extra, :swipeid=> @swipe.id}.to_json
+		# content_type :json
+	  	data= { :name => user.name, :photo => user.photo, :netid => netid, :extra => extra, :swipeid=> @swipe.id}
+		
+		response['Access-Control-Allow-Origin'] = '*'
+
+	  	# return JSONP data
+	  	return data.to_json
 	end
 end
 
 # Allows extra data to be added to a swipe, after the swipe occurs. Makes sense from a user perspective (swipe first, then do something)
-put '/swipe/:id' do
+post '/swipe/:id' do
 	netid = params[:netid]
 	app_id = params[:app_id]
 	extra = params[:extra]
@@ -99,17 +105,22 @@ put '/swipe/:id' do
 		end
 
 		swipe.save()
+		response['Access-Control-Allow-Origin'] = '*'
 	  	return swipe.to_json
 	end
 end
 
-put '/user/:netid' do
+
+post '/user/:netid' do
+	response['Access-Control-Allow-Origin'] = '*'
+
 	netid = params[:netid]
 	app_id = params[:app_id]
 	extra = params[:extra]
 
 	user = User.get(netid)
 	if not user
+		response['Access-Control-Allow-Origin'] = '*'
 		return('get off the floor, yo!')
 	else
 		if user.extra
@@ -120,6 +131,8 @@ put '/user/:netid' do
 		end
 
 		user.save()
+
+		response['Access-Control-Allow-Origin'] = '*'
 	  	return user.to_json
 	end
 end
@@ -131,18 +144,8 @@ get '/swipes/' do
 	
 	app_swipes= Swipe.all(:app_id=>app_id)
 
-	# matching_swipes = Array.new
 
-	# return app_swipes.length.to_json
-
-	# app_swipes.each do |swipe|
-	# 	if swipe.extra
-	# 		if swipe.extra["app_id_"+app_id.to_s] == extra
-	# 			matching_swipes.push(swipe)
-	# 		end
-	# 	end
-	# end
-
+	response['Access-Control-Allow-Origin'] = '*'
 
 	if app_swipes.length > 0
 		return app_swipes.to_json
@@ -150,21 +153,6 @@ get '/swipes/' do
 		return 'no swipes found'
 	end
 
-	# Failed attempts to use the built in filtering of datamapper
-
-	# Swipe.all(:extra=>nil)
-	# works
-	# Swipe.all(:order => [ :id.desc ], :limit => 20)
-
-	# Swipe.all(:extra => {:app_id => 1})
-	# didn't make an error, also didn't work
-
-	# ex={"app_id_1"=>{"checkin"=>"true"}}
-
-	# Customer.all(Customer.orders.order_lines.item.sku.like => "%BLUE%")
-	# Post.all(:comments => { :user => @user })
-	# Swipe.all(Swipe.extra['app_id_1']['checkin']=>true)
-	# fails
 
 end
 
