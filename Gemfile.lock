@@ -63,6 +63,10 @@ GEM
       rack (~> 1.3, >= 1.3.4)
       rack-protection (~> 1.1, >= 1.1.2)
       tilt (~> 1.3, >= 1.3.3)
+    sinatra-cross_origin (0.1.0)
+    sinatra-jsonp (0.3.1)
+      json_pure (~> 1.4)
+      sinatra (~> 1.0)
     stringex (1.3.0)
     tilt (1.3.3)
     uuidtools (2.1.2)
@@ -76,3 +80,5 @@ DEPENDENCIES
   json
   sass
   sinatra
+  sinatra-cross_origin
+  sinatra-jsonp
