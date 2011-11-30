@@ -154,56 +154,6 @@ get '/members/:nnumber/swipes' do
   end
 end
 
-#   ADMIN
-#---------------------------------------
-
-get '/admin/' do
-end
-
-get '/admin/apps' do
-end
-
-get '/admin/apps/new' do
-  # We should use datamapper's builtin api key field for this...
-  # https://github.com/datamapper/dm-types/blob/master/lib/dm-types/api_key.rb
-end
-
-post '/admin/apps/new' do
-end
-
-get '/admin/apps/:id/' do
-end
-
-get '/admin/apps/:id/edit' do
-end
-
-put '/admin/apps/:id' do
-end
-
-delete '/admin/apps/:id' do
-end
-
-get '/admin/devices' do
-end
-
-get '/admin/devices/new' do
-end
-
-post '/admin/devices/new' do
-end
-
-get '/admin/devices/:id' do
-end
-
-get '/admin/devices/:id/edit' do
-end
-
-put '/admin/devices/:id' do
-end
-
-delete '/admin/devices/:id' do
-end
-
 #   SASS
 #---------------------------------------
 
