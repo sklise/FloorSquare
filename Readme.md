@@ -38,61 +38,81 @@ API Routes
 - IP: 75.101.163.44
 - Port: 80
 
-### POST Routes
-**Expected behavoir for these routes is for a reading from a Device.**
+### Swipes
+**GET and POST methods for swipe events**
 
-#### Swipe
+* POST '/swipes/new'
 
-**Path**: '/swipes/new'
+    **Params**:
 
-**Params**:
+    Required:
 
-Required:
+    - user_nnumber=99999999 (no N)
+    - device_id=INTEGER
+    - app_key=UNIQUE_SECRET_KEY
 
-- user_nnumber=99999999 (no N)
-- device_id=INTEGER
-- app_key=UNIQUE_SECRET_KEY
+    Optional:
 
-Optional:
+    - netid=STRING
+    - credential=STRING (other reading from device)
+    - extra=JSON (big json field for additional info)
 
-- netid=STRING
-- credential=STRING (other reading from device)
-- extra=JSON (big json field for additional info)
+* GET '/swipes'
 
-### GET Routes
-**Expected behavoir for these routes is for presentation and use of individual Apps.**
+    **Params**:
 
-#### Swipe
-**Returns swipes matching an app_key. Defaults to the last 50 if no time parameters are specified.**
+    Required:
 
-**Path**: '/swipes'
+    - app_key=UNIQUE_SECRET_KEY
 
-**Params**:
+    Optional:
 
-Required:
+    - until=YYYY-MM-DD
+    - since=YYYY-MM-DD
+    - device_id=INTEGER
 
-- app_key=UNIQUE_SECRET_KEY
+* POST '/swipes/ID'
 
-Optional:
+    ID=INTEGER
+    
+    **Params:**
+    
+    Required:
+    
+    - app_key=UNIQUE_SECRET_KEY
+    
+    Optional:
+    
+    - extra=JSON
 
-- until=YYYY-MM-DD
-- since=YYYY-MM-DD
-- device_id=INTEGER
+### Members
+**GET and POST methods for member information.**
 
+A Member as defined here is a User that has a Swipe registered to the App.
 
-### Admin Routes
-**These routes will be used by the administrators of Floorsquare.**
+* GET '/members/NNUMBER'
 
-- GET `/admin`
-- GET `/admin/apps`
-- GET & POST `/admin/apps/new`
-- GET, PUT & DELETE `/admin/apps/ID`
-- GET `/admin/apps/ID/edit`
-- GET `/admin/devices`
-- GET & POST `/admin/devices/new`
-- GET, PUT & DELETE `/admin/devices/ID`
-- GET `/admin/devices/ID/edit`
+    Returns a json list of all Members who belong to the App.
 
+    NNUMBER = valid n number, all integers, no leading N.
+    
+    **Params**:
+    
+    Required:
+    
+    - app_key=UNIQUE_SECRETE_KEY
+
+* GET '/members/NNUMBER/swipes'
+
+    Returns all swipes belonging to the specified member for the App.
+
+    NNUMBER = valid n number, all integers, no leading N.
+    
+    **Params**:
+    
+    Required:
+    
+    - app_key=UNIQUE_SECRETE_KEY
 
 MODELS
 ----------
