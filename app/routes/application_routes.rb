@@ -68,7 +68,7 @@ post '/swipes/new/?' do
     # return JSONP data
     return data.to_json
   else
-    throw(:halt, [500, "Error saving item\n"])
+    throw(:halt, [401, "Error saving item\n"])
   end
 end
 
