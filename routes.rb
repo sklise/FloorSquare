@@ -10,54 +10,63 @@ end
 get '/swipes/?' do
   content_type :json
 
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key =>params[:app_key]).limit(1).first
   validate_app_key @app
 
   search = {}
-
-  # Set search terms in specified in params.
-  search[:created_at.lt] = params[:until] unless params[:until].nil?
-  search[:created_at.gt] = params[:since] unless params[:since].nil?
-
-  # If no time range is specified, set the limit to 50
-  if search.empty?
-    search[:limit] = 50
-  end
-
-  # Only get swipes from matching app
+  # Get swipes from matching App
   search[:app_id] = @app.id
-  # Sort by most recent.
-  search[:order] = [:created_at.desc]
   # Maybe an app will have more than one device, let them specify which.
   search[:device_id] = params[:device_id] unless params[:device_id].nil?
 
-  @swipes = Swipe.all(search)
+  if params[:until].nil? && params[:since].nil?
+    @swipes = Swipe.where(search).order("created_at DESC").limit(50)
+  else
+    @swipes = Swipe.where(search).order("created_at DESC")
+  end
+
+  if not params[:until].nil?
+    @swipes = @swipes.where("created_at <= :until", {:until => params[:until]})
+  end
+
+  if not params[:since].nil?
+    @swipes = @swipes.where("created_at >= :since", {:since => params[:since]})
+  end
+
+  swipe_response = []
+
+  @swipes.each do |swipe|
+    swipe_response << swipe.to_json(:include => :user)
+  end
+
   response['Access-Control-Allow-Origin'] = '*'
-  return @swipes.to_json
+  return swipe_response
 end
 
 post '/swipes/new/?' do
   content_type :json
   response['Access-Control-Allow-Origin'] = '*'
 
-  puts params.inspect
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key => params[:app_key]).limit(1).first
   validate_app_key @app
 
-  @swipe = Swipe.new
-  @swipe.user_nnumber = params[:user_nnumber]
-  @swipe.netid = params[:netid]
-  @swipe.credential = params[:credential]
-  @swipe.device_id = params[:device_id]
-  @swipe.app_id = @app.id
-  @swipe.extra = {"app_id_#{@app.id}" => params[:extra] }
+  @user = User.where(:nnumber => params[:user_nnumber]).first
+  if not @user
+    @user = User.create(:nnumber => params[:user_nnumber])
+  end
+
+  @swipe = Swipe.create({
+    :user_nnumber => params[:user_nnumber],
+    :user_id => @user.id,
+    :netid => params[:netid],
+    :credential => params[:credential],
+    :device_id => params[:device_id],
+    :app_id => @app.id,
+    :extra => {"app_id_#{@app.id}" => params[:extra] }
+  })
 
   if @swipe.save
-    @user = User.first(@swipe.user_nnumber)
-    if not @user
-      @user = User.new
-      @user.nnumber = @swipe.user_nnumber
-    end
+
     @user.extra ||= {}
     data = {
       :name => @user.name,
@@ -68,21 +77,21 @@ post '/swipes/new/?' do
     # return JSONP data
     return data.to_json
   else
-    throw(:halt, [500, "Error saving item\n"])
+    throw(:halt, [401, "Error saving item\n"])
   end
 end
 
 # Allows extra data to be added to a swipe, after the swipe occurs.
 # Makes sense from a user perspective (swipe first, then do something)
 post '/swipes/:id' do
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key => params[:app_key]).limit(1).first
   validate_app_key @app
 
-  @swipe = Swipe.get(params[:id])
+  @swipe = Swipe.find(params[:id])
 
   extra = params[:extra]
 
-  extra ||= {}
+  @swipe.extra ||= {}
   if @swipe.extra["app_id_#{@app.id}"]
     new_extra = @swipe.extra["app_id_#{@app.id}"].merge(extra)
     @swipe.extra = {"app_id_#{@app.id}" => new_extra }
@@ -90,7 +99,7 @@ post '/swipes/:id' do
     @swipe.extra = {"app_id_#{@app.id}" => extra }
   end
 
-  if @swipe.save()
+  if @swipe.save
     response['Access-Control-Allow-Origin'] = '*'
     return @swipe.to_json
   else
@@ -104,17 +113,25 @@ end
 
 # Get all users associated with this app
 get '/members' do
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
-  # This is a complicated relation that we don't currently have.
+
+  user_ids = []
+  @app.swipes.each do |swipe|
+    user_ids << swipe.user_id
+  end
+
+  @users = User.find(user_ids)
+
+  @users.to_json
 end
 
 # Get a specific member
 get '/members/:nnumber' do
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 
-  @user = User.get(params[:nnumber])
+  @user = User.where(:nnumber => params[:nnumber]).first
 
   extra = params[:extra]
 
@@ -141,10 +158,10 @@ end
 
 # Get the swipes belonging to a member
 get '/members/:nnumber/swipes' do
-  @app = App.first(:auth_key => params[:app_key])
+  @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 
-  @user = User.get(params[:nnumber])
+  @user = User.where(:nnumber => params[:nnumber]).first
   if not @user
     response['Access-Control-Allow-Origin'] = '*'
     throw(:halt, [404, "Member not found\n"])
