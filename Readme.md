@@ -24,13 +24,11 @@ _Directions for local development._
 
 6. Set up database
 
-        $ rake db:migrate
-
-7. If you want to add or modify the database, make a migration
-
-		  $ rake db:create_migration NAME=name_of_your_migration
-
-This creates a file in `db/migrate` which you can use to add and remove columns and tables using ActiveRecord.
+        $ irb
+        > require './application'
+        > DataMapper.auto_migrate! # This will erase the current contents of the db
+        > DataMapper.auto_upgrade! # For adding updates, wont erase the db
+    TODO: Make this a rake task.
 
 API Routes
 ----------
@@ -131,9 +129,8 @@ MODELS
 ### User
 
 * id => Serial # identifier used and set by database.
-* netid => String
-* nnumber => Integer # just the digits from the N number
-* extra => JSON
+* netid => String # 
+* ? What else do we need for this model?
 
 ### App
 
@@ -141,6 +138,7 @@ MODELS
 * auth_key => SHA # Unique id to identify app in API calls
 * email => String # email for contact person of app.
 * url => String # URL for app. To be used if we accomplish Push notifications
+* push_on => Boolean # set to true if app desires push notifications. This is a wishlist feature.
 
 ### Device
 
