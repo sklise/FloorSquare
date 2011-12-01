@@ -11,7 +11,7 @@ configure do |c|
   disable :protection
 
   set :allow_origin, :any
-  set :database, 'sqlite://development.sqlite'
+  set :database, ENV['DATABASE_URL'] || 'sqlite://development.sqlite'
 end
 
 require './models'
