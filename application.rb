@@ -1,21 +1,19 @@
 require 'bundler'
 Bundler.require
-require 'active_record'
+# require 'active_record'
+
 configure do |c|
   enable :sessions
   set :root, File.dirname(__FILE__)
-  set :views, Proc.new{ File.join(root, "app/views")}
+  set :views, Proc.new{ File.join(root, "views")}
   set :scss, :style => :compact
-  
+
   disable :protection
 
   set :allow_origin, :any
-
+  set :database, 'sqlite://development.sqlite'
 end
 
-set :database, 'mysql://root:@localhost/floorsquare'
-
-Dir['./app/*/*.rb'].each {|file| require file}
-
+require './models'
 require './helpers'
-Dir['./app/*/*.rb'].each {|file| require file}
+require './routes'
