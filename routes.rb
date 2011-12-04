@@ -72,6 +72,7 @@ post '/swipes/new/?' do
     @user.extra ||= {}
     data = {
       :name => @user.name,
+      :netid => @user.netid,
       :photo => @user.photo,
       :extra => @user.extra["app_id_#{@app.id}"],
       :swipeid=> @swipe.id
