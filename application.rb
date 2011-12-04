@@ -1,6 +1,5 @@
 require 'bundler'
 Bundler.require
-# require 'active_record'
 
 configure do |c|
   enable :sessions
@@ -9,8 +8,8 @@ configure do |c|
   set :scss, :style => :compact
 
   disable :protection
-
   set :allow_origin, :any
+
   set :database, ENV['DATABASE_URL'] || 'sqlite://development.sqlite'
 end
 
