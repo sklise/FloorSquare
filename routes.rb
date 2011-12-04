@@ -36,7 +36,9 @@ get '/swipes/?' do
   swipe_response = []
 
   @swipes.each do |swipe|
-    swipe_response << swipe.to_json(:include => :user)
+    newswipe = swipe.attributes
+    newswipe["user"] = swipe.user.attributes if swipe.user
+    swipe_response << newswipe
   end
 
   response['Access-Control-Allow-Origin'] = '*'
