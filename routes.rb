@@ -40,7 +40,7 @@ get '/swipes/?' do
   end
 
   response['Access-Control-Allow-Origin'] = '*'
-  return swipe_response
+  return swipe_response.to_json
 end
 
 post '/swipes/new/?' do
@@ -75,6 +75,7 @@ post '/swipes/new/?' do
       :swipeid=> @swipe.id
     }
     # return JSONP data
+    response['Access-Control-Allow-Origin'] = '*'
     return data.to_json
   else
     throw(:halt, [401, "Error saving item\n"])
