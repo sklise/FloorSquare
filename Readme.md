@@ -1,5 +1,7 @@
 # Floorsquare
 
+Commented code viewable [here](http://itpirl.com/floorsquare/docs/index.html)
+
 Installation
 ------------
 _Directions for local development._
