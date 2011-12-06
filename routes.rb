@@ -1,3 +1,7 @@
+# All routes for the Floorsquare dashboard and
+# API. The base url is http://www.itpirl.com/floorsquare.
+
+# Define the root (http://www.itpirl.com/floorsquare)
 get '/' do
   response['Access-Control-Allow-Origin'] = '*'
   erb :front
@@ -5,32 +9,49 @@ end
 
 #   SWIPES
 #---------------------------------------
+# Paths for swipe interaction.
 
-# Get last 50 swipes
+# Get swipes corresponding to an app.
 get '/swipes/?' do
+  # Return as json
   content_type :json
 
+  # Look for an App matching the specified app_key parameter
   @app = App.where(:auth_key =>params[:app_key]).limit(1).first
+  # If `@app` is nill, throw a 401 error
   validate_app_key @app
 
-  search = {}
-  # Get swipes from matching App
-  search[:app_id] = @app.id
-  # Maybe an app will have more than one device, let them specify which.
-  search[:device_id] = params[:device_id] unless params[:device_id].nil?
+  # Create a search hash to use as query conditions for Swipes
+  # `query` is a string with placeholders for conditions
+  # the placeholders are stored in the `conditions` hash.
+  query = "app_id = :app_id"
+  conditions = {:app_id => @app.id}
 
+  # Restrict search to one device. Useful if an app has multiple devices
+  # and only wants activity from one device.
+  if not params[:device_id].nil?
+    query += " AND device_id = :device_id"
+    conditions[:device_id] = params[:device_id]
+  end
+
+  # Check to see if a specific time range was queried.
   if params[:until].nil? && params[:since].nil?
-    @swipes = Swipe.where(search).order("created_at DESC").limit(50)
+    # If there was no time range specified, return only 50.
+    @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC", :limit => 50)
   else
-    @swipes = Swipe.where(search).order("created_at DESC")
-  end
-
-  if not params[:until].nil?
-    @swipes = @swipes.where("created_at <= :until", {:until => params[:until]})
-  end
-
-  if not params[:since].nil?
-    @swipes = @swipes.where("created_at >= :since", {:since => params[:since]})
+    if not params[:until].nil?
+      # Append to query to look for swipes with `created_at` exclusive
+      # less than the parameter.
+      query += " AND created_at <= :until"
+      conditions[:until] = Date.parse(params[:until])
+    end
+    if not params[:since].nil?
+      # Do the same for `since`, this is inclusive.
+      query += " AND created_at >= :since"
+      conditions[:since] = Date.parse(params[:since])
+    end
+    # Create the query with specified conditions and order by most recent.
+    @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC")
   end
 
   swipe_response = []
