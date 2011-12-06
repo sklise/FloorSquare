@@ -9,7 +9,7 @@ configure do |c|
 
   disable :protection
   set :allow_origin, :any
-
+  ActiveRecord::Base.include_root_in_json = false
   set :database, ENV['DATABASE_URL'] || 'sqlite://development.sqlite'
 end
 
