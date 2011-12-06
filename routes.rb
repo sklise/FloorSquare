@@ -11,7 +11,7 @@ end
 #---------------------------------------
 # Paths for swipe interaction.
 
-# Get swipes corresponding to an app.
+#### Get swipes corresponding to an app.
 get '/swipes/?' do
   # Return as json
   content_type :json
@@ -35,18 +35,19 @@ get '/swipes/?' do
   end
 
   # Check to see if a specific time range was queried.
+  # If there was no time range specified, return only 50.
   if params[:until].nil? && params[:since].nil?
-    # If there was no time range specified, return only 50.
     @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC", :limit => 50)
   else
+    # Append to query to look for swipes with `created_at` exclusive
+    # less than the parameter.
     if not params[:until].nil?
-      # Append to query to look for swipes with `created_at` exclusive
-      # less than the parameter.
       query += " AND created_at <= :until"
       conditions[:until] = Date.parse(params[:until])
     end
+
+    # Do the same for `since`, this is inclusive.
     if not params[:since].nil?
-      # Do the same for `since`, this is inclusive.
       query += " AND created_at >= :since"
       conditions[:since] = Date.parse(params[:since])
     end
@@ -54,18 +55,21 @@ get '/swipes/?' do
     @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC")
   end
 
+  # We now have a collection of Swipes stored in `@swipes` and
+  # need to return them as json which we will do with this loop.
+  # Include the associated User with each Swipe.
   swipe_response = []
-
   @swipes.each do |swipe|
-    newswipe = swipe.attributes
-    newswipe["user"] = swipe.user.attributes if swipe.user
-    swipe_response << newswipe
+    swipe_response << swipe.as_json(:include => :user)
   end
 
+  # Allow cross-origin json access
   response['Access-Control-Allow-Origin'] = '*'
-  return swipe_response.to_json
+  # Finally, return the array of Swipes and ensure it's sent as json.
+  swipe_response.to_json
 end
 
+#### POST a new swipe.
 post '/swipes/new/?' do
   content_type :json
 
