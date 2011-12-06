@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :swipes
+  serialize :extra
 
   def photo
     "http://itp.nyu.edu/image.php?width=260&height=260&cropratio=1:1&image=/people_pics/itppics/#{netid}.jpg"
@@ -20,6 +21,7 @@ end
 class Swipe < ActiveRecord::Base
   belongs_to :user
   belongs_to :app
+  serialize :extra
 end
 
 class Device < ActiveRecord::Base
