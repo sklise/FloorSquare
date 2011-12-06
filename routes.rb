@@ -53,7 +53,7 @@ post '/swipes/new/?' do
   validate_app_key @app
 
   @user = User.where(:nnumber => params[:user_nnumber]).first
-  if not @user
+  if @user.nil?
     @user = User.create(:nnumber => params[:user_nnumber])
   end
 
@@ -71,7 +71,8 @@ post '/swipes/new/?' do
 
     @user.extra ||= {}
     data = {
-      :name => @user.name,
+      :first => @user.first,
+      :last => @user.last,
       :netid => @user.netid,
       :photo => @user.photo,
       :extra => @user.extra["app_id_#{@app.id}"],
