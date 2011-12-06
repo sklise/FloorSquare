@@ -68,7 +68,6 @@ post '/swipes/new/?' do
   })
 
   if @swipe.save
-
     @user.extra ||= {}
     data = {
       :first => @user.first,
