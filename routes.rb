@@ -17,7 +17,7 @@ get '/swipes/?' do
   content_type :json
 
   # Look for an App matching the specified app_key parameter
-  @app = App.where(:auth_key =>params[:app_key]).limit(1).first
+  @app = App.find(:first, :conditions => ["auth_key = ?", params[:app_key]])
   # If `@app` is nill, throw a 401 error
   validate_app_key @app
 
@@ -68,20 +68,22 @@ end
 
 post '/swipes/new/?' do
   content_type :json
-  response['Access-Control-Allow-Origin'] = '*'
 
-  @app = App.where(:auth_key => params[:app_key]).limit(1).first
+  # Look for an App matching the specified app_key parameter
+  @app = App.find(:first, :conditions => ["auth_key = ?", params[:app_key]])
+  # If `@app` is nill, throw a 401 error
   validate_app_key @app
 
-  @user = User.where(:nnumber => params[:user_nnumber]).first
-  if @user.nil?
-    @user = User.create(:nnumber => params[:user_nnumber])
-  end
+  # Find the User that corresponds to the N Number
+  @user = User.find(:first, :conditions => ["nnumber = ?", params[:user_nnumber]])
 
+  # If the user is not found, throw 401. Floorsquare is only for ITP.
+  throw(:halt, [401, "User N Number not recognized\n"]) if @user.nil?
+
+  # Create a new Swipe with the submitted parameters
   @swipe = Swipe.create({
     :user_nnumber => params[:user_nnumber],
     :user_id => @user.id,
-    :netid => params[:netid],
     :credential => params[:credential],
     :device_id => params[:device_id],
     :app_id => @app.id,
