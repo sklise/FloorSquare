@@ -42,7 +42,7 @@ get '/swipes/?' do
   end
 
   response['Access-Control-Allow-Origin'] = '*'
-  return swipe_response.to_json(:except => [:updated_at, :app_id, :user_id, :netid])
+  return swipe_response.as_json(:except => [:updated_at, :app_id, :user_id, :netid])
 end
 
 post '/swipes/new/?' do
