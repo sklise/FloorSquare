@@ -1,5 +1,9 @@
 class User < ActiveRecord::Base
   has_many :swipes
+
+  def photo
+    "http://itp.nyu.edu/image.php?width=260&height=260&cropratio=1:1&image=/people_pics/itppics/#{netid}.jpg"
+  end
 end
 
 class App  < ActiveRecord::Base
