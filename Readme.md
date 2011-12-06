@@ -36,7 +36,7 @@ API Routes
 ----------
 **Here we define the routes used by Apps and Devices to create and read to and from Floorsquare.**
 
-- Host: http://www.itpirl.com
+- Host: http://www.itpirl.com/floorsquare
 - IP: 75.101.163.44
 - Port: 80
 
@@ -122,34 +122,50 @@ MODELS
 ### Swipe
 
 * id => Serial # identifier used and set by database.
-* timestamp => Date # If not set by the device, set by current server time.
+* user_nnumber => Integer # only the digits from the user's N number.
+* user_id => Integer # primary key for User record.
+* netid => String # THIS OR CREDENTIAL REQUIRED netid provided by device.
 * device_id => Integer # REQUIRED Identifies which device the swipe occurred.
 * credential => String # THIS OR NETID REQUIRED Raw data from device.
-* netid => String # THIS OR CREDENTIAL REQUIRED netid provided by device.
 * app_id => CSV # List, or single value for apps to associated with this swipe.
+* extra => JSON # Extra data, app specific
+* created_at => Date # Set by server on creation.
+* updated_at => Date # Set by server on update.
 
 ### User
 
 * id => Serial # identifier used and set by database.
 * netid => String
 * nnumber => Integer # just the digits from the N number
+* first => String # First name
+* last => String # Last name
+* role => String # Student, Faculty or Adjunct
+* photo => String # URL for photo at 260x260
 * extra => JSON
+* created_at => Date # Set by server on creation.
+* updated_at => Date # Set by server on update.
 
 ### App
 
 * id => Serial # identifier used and set by database.
-* auth_key => SHA # Unique id to identify app in API calls
+* name => String # Name of App
+* auth_key => SecureRandom.hex # Unique id to identify app in API calls
 * email => String # email for contact person of app.
 * url => String # URL for app. To be used if we accomplish Push notifications
+* created_at => Date # Set by server on creation.
+* updated_at => Date # Set by server on update.
 
 ### Device
 
 * id => Serial # identifier used and set by database.
-* auth_key => SHA # Unique id to identify device in POST requests.
+* auth_key => SecureRandom.hex # Unique id to identify device in POST requests.
 * device_type_id => Integer # what kind of device is this?
 * location => String or Integer # Identifies physical location of this device.
+* created_at => Date # Set by server on creation.
+* updated_at => Date # Set by server on update.
 
-### Device_Types
+### DeviceTypes
 
 * id => Serial # identifier used and set by database.
 * name => String # name of device type
+* description => Text
