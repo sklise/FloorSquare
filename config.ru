@@ -1,5 +1,5 @@
 require 'rubygems'
-require './application'
+require './index'
 map '/floorsquare' do
   run Sinatra::Application
 end
