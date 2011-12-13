@@ -7,6 +7,52 @@ get '/' do
   erb :front
 end
 
+#    APPS
+#---------------------------------------
+#Find all apps written with the API and display them after swipe
+get '/dashboard' do
+  # @apps = App.find(:all, :users => ["on_dashboard = true"])
+  @apps = App.all
+  @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
+  erb :dashboard
+end
+
+#post the swipe
+post '/dashboard' do
+  @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
+  redirect '/floorsquare/dashboard'
+end
+
+get '/dashboard/app' do
+  @app = App.where(:auth_key => params[:app_key]).first
+   validate_app_key @app
+
+   user_ids = []
+   @app.swipes.each do |swipe|
+     user_ids << swipe.user_id
+   end
+
+   @users = User.find(user_ids)
+
+   @users.to_json
+end
+
+# #get '/dashboard/app' do
+# get '/'
+#   @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
+#   @apps = App.all
+#   erb :select_apps
+# end
+post '/dashboard/app' do
+  app_ids = params[:app_ids].split(',') #find all the apps and split them up
+  app_ids.each do |app_id| #go through each app and make it an app_id 
+    app_id.to_i #then make app id into an integer
+    Swipe.new(:user_nnumber => 111111, :app_id => 11111) #create new Swipe instance in database with the nnumber and app id of app  
+  end
+end
+
+
+
 #   SWIPES
 #---------------------------------------
 # Paths for swipe interaction.

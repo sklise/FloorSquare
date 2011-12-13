@@ -1,21 +1,54 @@
-<h1>Floorsquare</h1>
-<br>
-<br>
-<br>
+<style type="text/css">
+h1 {
+	font-size: 70px;
+	text-transform: uppercase;
+	text-outline:#AAA;
+    text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	color: rgba(0,0,0,.3);
+	border:rgb(0,0,0);
+}
+h2 {
+	font-size: 50px;
+	text-transform: uppercase;
+	text-outline:#AAA;
+    text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	color: rgba(0,0,0,.3);
+	border:rgb(0,0,0);
+}
+
+body {
+	font-size: 40px;
+	background: white;
+    text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	color: #AAA;
+	border:rgb(255,50,0);
+	}
+</style>
+<body>
+<img src="/floorsquare/flrsq_logo_med.png" alt="floorsquare logo" height="66" width="332" />
+</br>
+</br>
+</br>
+</br>
+<h2>Please swipe your ID to start</h2>
+<FORM action="/floorsquare/dashboard" method="post">
+	<!-- <input name="swipe" value="SWIPE!" type="submit"> -->
+	<input type="number" id="swipeinput" style="font-size: 2em">
+	</form>
 <!-- <p>Simulated Swipe</p>
 <form method="POST" action="/swipe/new">
 <input type="text" name="nnumber" />
 <input type="submit" value="Go" />
 </form> -->
+<!--might need to be @user.id if cached locally -->
 
-<p id="newswipe">New Swipe</p>
-<br>
-<p id="putswipe">Put Swipe</p>
-<br>
-<p id="putuser">Put User Skills</p>
-<br>
-<p id="getswipes">Get Swipes that are: checkin:true;</p>
-<br>
+</body>
 
 <script>
 
@@ -23,7 +56,7 @@
 var swipeid;
 // var url = "http://localhost:9292"
 // var url = "http://127.0.0.1:9292"
-var url = ""
+var url = "http://www.itpirl.com/"
 
 $(function() {
 
