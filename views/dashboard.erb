@@ -1,0 +1,35 @@
+<style type="text/css">
+h1 {
+	font-size: 70px;
+	text-transform: uppercase;
+	text-outline:#AAA;
+    text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	color: rgba(0,0,0,.3);
+	border:rgb(0,0,0);
+}
+
+
+body {
+	font-size: 40px;
+	background: white;
+    text-align: center;
+	margin-left: 10%;
+	margin-right: 10%;
+	color: #AAA;
+	border:rgb(255,50,0);
+	}
+	</style>
+	<body>
+<h1>Hey <%= @user.first %>! Which app would you like to use?</h1>
+
+<FORM action="/floorsquare/members/:nnumber" method="post">
+	</br>
+	<% @apps.each do |app| %>
+		<INPUT type="checkbox" name="app_ids[]" value="<%= app.id %>"> <%= app.name %><BR>
+	<% end %>
+	<input name="submit" value="submit" type="submit">
+	    
+	</form>
+</body>
