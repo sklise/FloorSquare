@@ -42,6 +42,84 @@ API. The base url is http://www.itpirl.com/floorsquare.</p>
 <span class="k">end</span></pre></div>
       </td>
     </tr>
+    <tr id='section-APPS'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-APPS">&#182;</a>
+        </div>
+        <h2>APPS</h2>
+
+<p>Find all apps written with the API and display them after swipe</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">get</span> <span class="s1">&#39;/dashboard&#39;</span> <span class="k">do</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-4'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-4">&#182;</a>
+        </div>
+        <p>@apps = App.find(:all, :users =&gt; [&ldquo;on_dashboard = true&rdquo;])</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre>  <span class="vi">@apps</span> <span class="o">=</span> <span class="no">App</span><span class="o">.</span><span class="n">all</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;nnumber = ?&quot;</span><span class="p">,</span> <span class="mi">19663226</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">erb</span> <span class="ss">:dashboard</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-5'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-5">&#182;</a>
+        </div>
+        <p>post the swipe</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">post</span> <span class="s1">&#39;/dashboard&#39;</span> <span class="k">do</span>
+  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;nnumber = ?&quot;</span><span class="p">,</span> <span class="mi">19663226</span><span class="o">]</span><span class="p">)</span>
+  <span class="n">redirect</span> <span class="s1">&#39;/floorsquare/dashboard&#39;</span>
+<span class="k">end</span>
+
+<span class="n">get</span> <span class="s1">&#39;/dashboard/app&#39;</span> <span class="k">do</span>
+  <span class="vi">@app</span> <span class="o">=</span> <span class="no">App</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="ss">:auth_key</span> <span class="o">=&gt;</span> <span class="n">params</span><span class="o">[</span><span class="ss">:app_key</span><span class="o">]</span><span class="p">)</span><span class="o">.</span><span class="n">first</span>
+   <span class="n">validate_app_key</span> <span class="vi">@app</span>
+
+   <span class="n">user_ids</span> <span class="o">=</span> <span class="o">[]</span>
+   <span class="vi">@app</span><span class="o">.</span><span class="n">swipes</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">swipe</span><span class="o">|</span>
+     <span class="n">user_ids</span> <span class="o">&lt;&lt;</span> <span class="n">swipe</span><span class="o">.</span><span class="n">user_id</span>
+   <span class="k">end</span>
+
+   <span class="vi">@users</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">user_ids</span><span class="p">)</span>
+
+   <span class="vi">@users</span><span class="o">.</span><span class="n">to_json</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
+    <tr id='section-get_&amp;lsquo;/dashboard/app&amp;rsquo;_do'>
+      <td class=docs>
+        <div class="pilwrap">
+          <a class="pilcrow" href="#section-get_&amp;lsquo;/dashboard/app&amp;rsquo;_do">&#182;</a>
+        </div>
+        <h1>get &lsquo;/dashboard/app&rsquo; do</h1>
+
+<p>get &lsquo;/&rsquo;
+  @user = User.find(:first, :conditions =&gt; [&ldquo;nnumber = ?&rdquo;, 19663226])
+  @apps = App.all
+  erb :select_apps
+end</p>
+      </td>
+      <td class=code>
+        <div class='highlight'><pre><span class="n">post</span> <span class="s1">&#39;/dashboard/app&#39;</span> <span class="k">do</span>
+  <span class="n">app_ids</span> <span class="o">=</span> <span class="n">params</span><span class="o">[</span><span class="ss">:app_ids</span><span class="o">].</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span> <span class="c1">#find all the apps and split them up</span>
+  <span class="n">app_ids</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">app_id</span><span class="o">|</span> <span class="c1">#go through each app and make it an app_id </span>
+    <span class="n">app_id</span><span class="o">.</span><span class="n">to_i</span> <span class="c1">#then make app id into an integer</span>
+    <span class="no">Swipe</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:user_nnumber</span> <span class="o">=&gt;</span> <span class="mi">111111</span><span class="p">,</span> <span class="ss">:app_id</span> <span class="o">=&gt;</span> <span class="mi">11111</span><span class="p">)</span> <span class="c1">#create new Swipe instance in database with the nnumber and app id of app  </span>
+  <span class="k">end</span>
+<span class="k">end</span></pre></div>
+      </td>
+    </tr>
     <tr id='section-SWIPES'>
       <td class=docs>
         <div class="pilwrap">
@@ -66,10 +144,10 @@ API. The base url is http://www.itpirl.com/floorsquare.</p>
         <div class='highlight'><pre><span class="n">get</span> <span class="s1">&#39;/swipes/?&#39;</span> <span class="k">do</span></pre></div>
       </td>
     </tr>
-    <tr id='section-5'>
+    <tr id='section-9'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-5">&#182;</a>
+          <a class="pilcrow" href="#section-9">&#182;</a>
         </div>
         <p>Return as json</p>
       </td>
@@ -77,10 +155,10 @@ API. The base url is http://www.itpirl.com/floorsquare.</p>
         <div class='highlight'><pre>  <span class="n">content_type</span> <span class="ss">:json</span></pre></div>
       </td>
     </tr>
-    <tr id='section-6'>
+    <tr id='section-10'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-6">&#182;</a>
+          <a class="pilcrow" href="#section-10">&#182;</a>
         </div>
         <p>Look for an App matching the specified app_key parameter</p>
       </td>
@@ -88,10 +166,10 @@ API. The base url is http://www.itpirl.com/floorsquare.</p>
         <div class='highlight'><pre>  <span class="vi">@app</span> <span class="o">=</span> <span class="no">App</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;auth_key = ?&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:app_key</span><span class="o">]]</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-7'>
+    <tr id='section-11'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-7">&#182;</a>
+          <a class="pilcrow" href="#section-11">&#182;</a>
         </div>
         <p>If <code>@app</code> is nill, throw a 401 error</p>
       </td>
@@ -99,10 +177,10 @@ API. The base url is http://www.itpirl.com/floorsquare.</p>
         <div class='highlight'><pre>  <span class="n">validate_app_key</span> <span class="vi">@app</span></pre></div>
       </td>
     </tr>
-    <tr id='section-8'>
+    <tr id='section-12'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-8">&#182;</a>
+          <a class="pilcrow" href="#section-12">&#182;</a>
         </div>
         <p>Create a search hash to use as query conditions for Swipes
 <code>query</code> is a string with placeholders for conditions
@@ -113,10 +191,10 @@ the placeholders are stored in the <code>conditions</code> hash.</p>
   <span class="n">conditions</span> <span class="o">=</span> <span class="p">{</span><span class="ss">:app_id</span> <span class="o">=&gt;</span> <span class="vi">@app</span><span class="o">.</span><span class="n">id</span><span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-9'>
+    <tr id='section-13'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-9">&#182;</a>
+          <a class="pilcrow" href="#section-13">&#182;</a>
         </div>
         <p>Restrict search to one device. Useful if an app has multiple devices
 and only wants activity from one device.</p>
@@ -128,10 +206,10 @@ and only wants activity from one device.</p>
   <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-10'>
+    <tr id='section-14'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-10">&#182;</a>
+          <a class="pilcrow" href="#section-14">&#182;</a>
         </div>
         <p>Check to see if a specific time range was queried.
 If there was no time range specified, return only 50.</p>
@@ -142,10 +220,10 @@ If there was no time range specified, return only 50.</p>
   <span class="k">else</span></pre></div>
       </td>
     </tr>
-    <tr id='section-11'>
+    <tr id='section-15'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-11">&#182;</a>
+          <a class="pilcrow" href="#section-15">&#182;</a>
         </div>
         <p>Append to query to look for swipes with <code>created_at</code> exclusive
 less than the parameter.</p>
@@ -157,10 +235,10 @@ less than the parameter.</p>
     <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-12'>
+    <tr id='section-16'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-12">&#182;</a>
+          <a class="pilcrow" href="#section-16">&#182;</a>
         </div>
         <p>Do the same for <code>since</code>, this is inclusive.</p>
       </td>
@@ -171,10 +249,10 @@ less than the parameter.</p>
     <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-13'>
+    <tr id='section-17'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-13">&#182;</a>
+          <a class="pilcrow" href="#section-17">&#182;</a>
         </div>
         <p>Create the query with specified conditions and order by most recent.</p>
       </td>
@@ -183,10 +261,10 @@ less than the parameter.</p>
   <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-14'>
+    <tr id='section-18'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-14">&#182;</a>
+          <a class="pilcrow" href="#section-18">&#182;</a>
         </div>
         <p>We now have a collection of Swipes stored in <code>@swipes</code> and
 need to return them as json which we will do with this loop.
@@ -199,10 +277,10 @@ Include the associated User with each Swipe.</p>
   <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-15'>
+    <tr id='section-19'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-15">&#182;</a>
+          <a class="pilcrow" href="#section-19">&#182;</a>
         </div>
         <p>Allow cross-origin json access</p>
       </td>
@@ -210,10 +288,10 @@ Include the associated User with each Swipe.</p>
         <div class='highlight'><pre>  <span class="n">response</span><span class="o">[</span><span class="s1">&#39;Access-Control-Allow-Origin&#39;</span><span class="o">]</span> <span class="o">=</span> <span class="s1">&#39;*&#39;</span></pre></div>
       </td>
     </tr>
-    <tr id='section-16'>
+    <tr id='section-20'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-16">&#182;</a>
+          <a class="pilcrow" href="#section-20">&#182;</a>
         </div>
         <p>Finally, return the array of Swipes and ensure it&rsquo;s sent as json.</p>
       </td>
@@ -234,10 +312,10 @@ Include the associated User with each Swipe.</p>
   <span class="n">content_type</span> <span class="ss">:json</span></pre></div>
       </td>
     </tr>
-    <tr id='section-18'>
+    <tr id='section-22'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-18">&#182;</a>
+          <a class="pilcrow" href="#section-22">&#182;</a>
         </div>
         <p>Look for an App matching the specified app_key parameter</p>
       </td>
@@ -245,10 +323,10 @@ Include the associated User with each Swipe.</p>
         <div class='highlight'><pre>  <span class="vi">@app</span> <span class="o">=</span> <span class="no">App</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;auth_key = ?&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:app_key</span><span class="o">]]</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-19'>
+    <tr id='section-23'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-19">&#182;</a>
+          <a class="pilcrow" href="#section-23">&#182;</a>
         </div>
         <p>If <code>@app</code> is nill, throw a 401 error</p>
       </td>
@@ -256,10 +334,10 @@ Include the associated User with each Swipe.</p>
         <div class='highlight'><pre>  <span class="n">validate_app_key</span> <span class="vi">@app</span></pre></div>
       </td>
     </tr>
-    <tr id='section-20'>
+    <tr id='section-24'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-20">&#182;</a>
+          <a class="pilcrow" href="#section-24">&#182;</a>
         </div>
         <p>Find the User that corresponds to the N Number</p>
       </td>
@@ -267,10 +345,10 @@ Include the associated User with each Swipe.</p>
         <div class='highlight'><pre>  <span class="vi">@user</span> <span class="o">=</span> <span class="no">User</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="ss">:first</span><span class="p">,</span> <span class="ss">:conditions</span> <span class="o">=&gt;</span> <span class="o">[</span><span class="s2">&quot;nnumber = ?&quot;</span><span class="p">,</span> <span class="n">params</span><span class="o">[</span><span class="ss">:user_nnumber</span><span class="o">]]</span><span class="p">)</span></pre></div>
       </td>
     </tr>
-    <tr id='section-21'>
+    <tr id='section-25'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-21">&#182;</a>
+          <a class="pilcrow" href="#section-25">&#182;</a>
         </div>
         <p>If the user is not found, throw 401. Floorsquare is only for ITP.</p>
       </td>
@@ -278,10 +356,10 @@ Include the associated User with each Swipe.</p>
         <div class='highlight'><pre>  <span class="kp">throw</span><span class="p">(</span><span class="ss">:halt</span><span class="p">,</span> <span class="o">[</span><span class="mi">401</span><span class="p">,</span> <span class="s2">&quot;User N Number not recognized</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="vi">@user</span><span class="o">.</span><span class="n">nil?</span></pre></div>
       </td>
     </tr>
-    <tr id='section-22'>
+    <tr id='section-26'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-22">&#182;</a>
+          <a class="pilcrow" href="#section-26">&#182;</a>
         </div>
         <p>Create a new Swipe with the submitted parameters</p>
       </td>
@@ -307,10 +385,10 @@ Include the associated User with each Swipe.</p>
     <span class="p">}</span></pre></div>
       </td>
     </tr>
-    <tr id='section-23'>
+    <tr id='section-27'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-23">&#182;</a>
+          <a class="pilcrow" href="#section-27">&#182;</a>
         </div>
         <p>return JSONP data</p>
       </td>
@@ -323,10 +401,10 @@ Include the associated User with each Swipe.</p>
 <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-24'>
+    <tr id='section-28'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-24">&#182;</a>
+          <a class="pilcrow" href="#section-28">&#182;</a>
         </div>
         <p>Allows extra data to be added to a swipe, after the swipe occurs.
 Makes sense from a user perspective (swipe first, then do something)</p>
@@ -369,10 +447,10 @@ Makes sense from a user perspective (swipe first, then do something)</p>
         <div class='highlight'><pre></pre></div>
       </td>
     </tr>
-    <tr id='section-26'>
+    <tr id='section-30'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-26">&#182;</a>
+          <a class="pilcrow" href="#section-30">&#182;</a>
         </div>
         <p>Get all users associated with this app</p>
       </td>
@@ -392,10 +470,10 @@ Makes sense from a user perspective (swipe first, then do something)</p>
 <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-27'>
+    <tr id='section-31'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-27">&#182;</a>
+          <a class="pilcrow" href="#section-31">&#182;</a>
         </div>
         <p>Get a specific member</p>
       </td>
@@ -430,10 +508,10 @@ Makes sense from a user perspective (swipe first, then do something)</p>
 <span class="k">end</span></pre></div>
       </td>
     </tr>
-    <tr id='section-28'>
+    <tr id='section-32'>
       <td class=docs>
         <div class="pilwrap">
-          <a class="pilcrow" href="#section-28">&#182;</a>
+          <a class="pilcrow" href="#section-32">&#182;</a>
         </div>
         <p>Get the swipes belonging to a member</p>
       </td>
