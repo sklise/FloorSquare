@@ -24,11 +24,13 @@ body {
 	<body>
 <h1>Hey <%= @user.first %>! Which app would you like to use?</h1>
 
-<FORM action="/floorsquare/members/:nnumber" method="post">
+<FORM action="/floorsquare/dashboard/app" method="post">
 	</br>
 	<% @apps.each do |app| %>
-		<INPUT type="checkbox" name="app_ids[]" value="<%= app.id %>"> <%= app.name %><BR>
+		<INPUT type="radio" name="app_ids[]" value="<%= app.id %>"> <%= app.name %><BR>
 	<% end %>
+	</br>
+	
 	<input name="submit" value="submit" type="submit">
 	    
 	</form>
