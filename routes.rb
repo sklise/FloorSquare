@@ -16,7 +16,7 @@ end
 #post the swipe
 post '/dashboard' do
   @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
-  redirect '/dashboard'
+  redirect '/floorsquare/dashboard'
 end
 
 get '/dashboard/app' do
