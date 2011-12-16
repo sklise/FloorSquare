@@ -1,6 +1,7 @@
 <table id="checkins">
 	<thead>
 		<tr>
+			<th class="netid">Netid</th>
 			<th>First Name</th>
 			<th>Last Name</th>
 			<th>Project(s)</th>
@@ -10,10 +11,11 @@
 	<tbody>
 		<% @swipes.each do |swipe| %>
 			<tr>
-				<td><%= swipe.user.first %></td>
-				<td><%= swipe.user.last %></td>
-				<td>-</td>
-				<td><%= swipe.created_at %></td>
+				<td class="netid"><%= swipe.user.netid %></td>
+				<td class="first"><%= swipe.user.first %></td>
+				<td class="last"><%= swipe.user.last %></td>
+				<td class="project">-</td>
+				<td class="time"><%= swipe.created_at %></td>
 			</tr>
 		<% end %>
 	</tbody>
