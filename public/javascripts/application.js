@@ -15,7 +15,7 @@ $(document).ready(function(){
 				console.log(projects);
 				$row.find('.project').empty();
 				$.each(projects, function(i,v){
-					$row.find('.project').append(projects[i][1]);
+					$row.find('.project').append(projects[i][1]+" ");
 				})
 			}
 		});
