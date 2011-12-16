@@ -20,6 +20,7 @@ class App  < ActiveRecord::Base
   # auth_key value is unique.
   validates_uniqueness_of :auth_key
   has_many :swipes
+  has_one :user
 
   private
     def ensure_auth_key
