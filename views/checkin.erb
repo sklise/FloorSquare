@@ -15,7 +15,7 @@
 				<td class="first"><%= swipe.user.first %></td>
 				<td class="last"><%= swipe.user.last %></td>
 				<td class="project">-</td>
-				<td class="time"><%= swipe.created_at %></td>
+				<td class="time"><%= swipe.created_at.getlocal("-05:00").strftime("%d %a %H:%M") %></td>
 			</tr>
 		<% end %>
 	</tbody>
