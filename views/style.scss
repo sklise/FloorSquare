@@ -1,3 +1,16 @@
+// COLORS
+$font-base: rgba(0,0,0,1);
+$white: rgba(255,255,255,1);
+$green: rgba(38,114,11,1);
+$red: rgba(205,49,13,1);
+$orange: rgba(205,100,13,1);
+$base-color: rgba(248,250,252,1);
+$color-2: rgba(198,199,201,1);
+$slate: rgba(206,212,229,1);
+$sky: rgba(173,213,252,1);
+$link: rgba(17,114,228,1);
+
+
 /* http://meyerweb.com/eric/tools/css/reset/ 
    v2.0 | 20110126
    License: none (public domain)
@@ -48,7 +61,7 @@ table {
 }
 
 body {
-  background-color: rgb(20,20,20);
+  background-color: white;
   width: 90%;
   margin: 3em auto;
 }
@@ -62,4 +75,61 @@ h1 {
 p
 {
 	color: white;
+}
+body {
+	color: #333;
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 1.6em;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 0;
+	width: 100%;
+}
+
+#checkins {
+    width: 100%;
+    td {
+      padding: 0.4em;
+    }
+
+    th {
+      padding: 0.25em 1em;
+      background-position: center right;
+      background-repeat: no-repeat;
+      border-bottom: 1px solid rgba(206,212,229,1);
+      min-width: 6em;
+
+      &:hover {
+        color: $orange;
+        cursor: pointer;
+      }
+
+      &.sorting_asc {
+        background-image: url('/images/sort_asc.png');
+      }
+
+      &.sorting_desc {
+        background-image: url('/images/sort_desc.png');
+      }
+
+      &.sorting {
+        background-image: url('/images/sort_both.png');
+      }
+    }
+
+	.sorting_asc,
+	.sorting_desc {
+		font-weight: bold;
+	}
+
+    tr.odd {
+      background-color: #efefef;
+    }
+
+    tbody tr:hover {
+      background-color: rgba(243,216,40,0.7);
+      -webkit-transition: all 0.3s ease-in-out;
+    }
 }

@@ -7,6 +7,12 @@ get '/' do
   erb :front
 end
 
+get '/show-check-in' do
+  @swipes = Swipe.find(:all, :conditions => ["app_id = 4"])
+
+  erb :checkin
+end
+
 #    APPS
 #---------------------------------------
 #Find all apps written with the API and display them after swipe
