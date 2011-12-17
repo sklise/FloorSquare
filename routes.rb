@@ -8,9 +8,7 @@ get '/floorsquare/?' do
 end
 
 get '/floorsquare/show-check-in' do
-  @swipes = Swipe.find(:all, :conditions => ["app_id = 4"])
-
-  erb :checkin
+  redirect "/floorsquare_winter2011.html#/checkins"
 end
 
 #    APPS
