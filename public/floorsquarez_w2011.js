@@ -151,7 +151,12 @@ var app = Sammy('#contentMain', function() {
                 var projectinfos = [];
                 for(i in data.results){
                     console.log(data.results[i]);
-                    projectinfos.push({"title":data.results[i][1], "abstract":data.results[i][2]})
+                    projectinfos.push({
+                        "title":data.results[i][1], 
+                        "pitch":data.results[i][2],
+                        "abstract":data.results[i][3],
+                        "image":data.results[i][5]
+                    });
                 }
                 context.renderEach('projects.mustache',projectinfos).appendTo("#projects");
             });
