@@ -1,4 +1,4 @@
-   var $container = $('#allStudentsBoard');
+    var $container = $('#allStudentsBoard');
     var testSkills = "ruby, javascript, geolocation, gamification, databases";
     var testSkillsJSON = $.toJSON( testSkills );
     // console.log("testSkills = "+testSkills);

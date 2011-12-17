@@ -3,21 +3,19 @@ $(document).ready(function(){
     	"bPaginate": false
   	});
 	$('#checkins .netid').hide();
-	$('#checkins tbody tr').each(function(e){
-		console.log(e);
-		$row = $(this);
-		console.log($row);
-		netid = $row.find('.netid').text();
-		var name = $row.find('.first').text()+' '+$row.find('.last').text();
+	_.each($('#checkins tbody tr'), function(e,i) {
+	  $row = $(e);
+		var netid = $row.find('.netid').text();
 		$.ajax({
 			url: 'http://itp.nyu.edu/~mah593/projects_db_work/serving_scripts/get_projects_venue.php?venueid=84&netid='+netid,
 			dataType: 'jsonp',
 			success: function(data){
+			  console.log(data.results);
 				var projects = data.results;
-				console.log(projects);
-				$row.find('.project').empty();
+				console.log(i)
+				$('#checkins tbody tr:eq('+i+')').find('.project').empty();
 				$.each(projects, function(i,v){
-					$row.find('.project').append(projects[i][1]+" ");
+  				$('#checkins tbody tr:eq('+i+')').find('.project').append(projects[i][1]+" ");
 				})
 			}
 		});
