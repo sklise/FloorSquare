@@ -71,9 +71,8 @@ var app = Sammy('#contentMain', function() {
                 swipe.user.extra.app_id_4.skills= swipe.user.extra.app_id_4.skills.split(",");
             }*/
             
-         for(i in processed_swipes) {
+        for(i in processed_swipes) {
             if(swipe.user.last == processed_swipes[i].user.last) {
-                console.log(swipe.user.last);
                 processed_swipes.splice(i,1);
             }
         }
@@ -88,6 +87,7 @@ var app = Sammy('#contentMain', function() {
           }
           // swipe.isunavail=  ? 
           processed_swipes.push(swipe);
+          
         }
 
         // console.log(processed_swipes);
@@ -135,7 +135,6 @@ var app = Sammy('#contentMain', function() {
    var swipeid = null;
    $("#allStudentsBoard").empty().isotope('destroy').hide();
 
-    console.log("yo");
 
     this.send($.ajax, url+"/swipes/new", {
         data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, }},
@@ -157,9 +156,9 @@ var app = Sammy('#contentMain', function() {
 
             $('#skillfield').hide();
     
-
+            $("#accountForm .greeting").css({'height':'110px'});
             $("#accountForm h2").empty();
-             $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>home</p>");
+             $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>click here to check in</p>");
               // $('#skillfield').tagsInput({
               //                width: '780',
               //                height:' 40px',
@@ -203,9 +202,6 @@ var app = Sammy('#contentMain', function() {
 
             });  // end then of initial ajax call
 
-
-
-            // console.log('this probably happens before hi');
             //and then render it here because I can't figure out sammy all the way.
         } 
     });
@@ -325,6 +321,43 @@ $(document).keypress(function(e) {
     }
 
     console.log(keyHistory);
+    
+    
+    var nnumber=nn;
+   var swipeid = null;
+   $("#allStudentsBoard").empty().isotope('destroy').hide();
+
+
+    this.send($.ajax, url+"/swipes/new", {
+        data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, }},
+        type: 'POST',
+        crossDomain: true,
+        success: function(data){      
+            // extra.app_id_4.skills= extra.app_id_4.skills.split(",");
+            swipeid=data.swipeid;
+            this.render('swipe.mustache', data).appendTo('#contentMain')
+            .then(function(){
+                
+                 this.send($.ajax, url+"/swipes/"+swipeid, {
+                        data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, available: true }},
+                        type: 'POST',
+                        crossDomain: true,
+                        success: function(data){
+                            console.log('sucessss');
+                            postSkills(nnumber);
+                            $(".formpage").hide();
+                            this.redirect("#/");
+                          }  //end success
+                  });  // /send ajax
+
+
+            });  // end then of initial ajax call
+
+            //and then render it here because I can't figure out sammy all the way.
+        } 
+     });
+
+    
 });
 
 // ;817565215=2227?
