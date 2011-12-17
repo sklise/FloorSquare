@@ -45,7 +45,6 @@ a {
     padding: 14px 0px 10px;
     height: 60px;
     color: silver;
-    /* background-color: #eee; */
 }
 #header h1 a {
     float: none;
@@ -56,18 +55,73 @@ a {
     display: block;
     background: url(images/flrsq_winter2011_logo.gif) no-repeat 0 0;
 }
-#header #searchBar {
+#header ul {
     float: right;
+    list-style-type: none;
+    font-family: Quicksand, 'sans serif';
+}
+#header ul li a {
+    padding: 2px 6px 3px;
+    text-decoration: none;
+    display: inline-block;
+    color:#555;
+    font-size: 11px;
+    margin-top: 2px;
+    text-align: left;
+	background-color: rgb(186,217,118);/* #FFEF5F; */
+	padding: 4px 8px 1px;
+	line-height: 15px;
+	margin-bottom: 6px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border: #222 solid 2px;
+}
+#header ul li a:hover {
+    background-color: #F5F5BB;
+}
+#footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    margin-top: 0px;
+    padding: 14px 0px 10px;
+    height: 60px;
+    color: silver;
+    background-color: #fff;
+    z-index: 10;
+    box-shadow: 0px -1px 10px #222;
+}
+#footer h1 a {
+    float: none;
+    text-decoration: none;
+    height: 60px;
+    color: #666;
+    display: block;
+    background: url(images/flrsq_winter2011_logo.gif) no-repeat 0 0;
+}
+#footer  a {
+    text-decoration: none;
+}
+#centerNav {
+    position: relative;
+    width: 900px;
+    height: 60px;
+    left: 50%;
+    margin-left: -450px;
+}
+#searchBar {
+    /* float: right; */
     font-size: 11px;
     width: 200px;
     height: 32px;
-    margin-top: -48px;
+    /* margin-top: -48px; */
     margin-right: 160px;
 	overflow: hidden;
 	/*display: none;*/
 }
 input:focus {outline: none;}
-#header #searchBar input{
+ #searchBar input{
     position: absolute;
     width: 180px;
     height: 30px;
@@ -121,7 +175,7 @@ input:focus {outline: none;}
     margin-left: 180px;
     z-index: 400;
 }
-#header #seeAll {
+ #seeAll {
     background: rgb(245,245,187) url(images/allDefault_32.gif) repeat 0 0;
     /*display: none;*/
     float: right;
@@ -142,12 +196,13 @@ input:focus {outline: none;}
 	-webkit-border-top-right-radius: 3px;
 	-webkit-border-bottom-right-radius: 3px;
 }
-#header #seeAll:hover {
+#seeAll:hover {
     background: rgb(245,245,187) url(images/allDefault_32hover.gif) repeat 0 0;
 }
 
-#header #viewAll {
+#viewAll {
     background: rgb(245,245,187) url(images/viewall.gif) repeat -10px 0;
+     font-family: Quicksand, 'sans serif';
     /*display: none;*/
     float: right;
     height: 30px;
@@ -156,7 +211,8 @@ input:focus {outline: none;}
     font-weight: 600;
     color: #333;
     line-height: 30px;
-    margin-top: -48px;
+   /*  margin-top: -48px; */
+   margin-top: 2px;
     border-top: #222 solid 2px;
     border-right: #222 solid 2px;
     border-bottom: #222 solid 2px;
@@ -167,7 +223,7 @@ input:focus {outline: none;}
 	-webkit-border-top-right-radius: 3px;
 	-webkit-border-bottom-right-radius: 3px;
 }
-#header #viewAll:hover {
+#viewAll:hover {
     background: rgb(245,245,187) url(images/viewallhover.gif) repeat -10px 0;
 }
 
@@ -217,7 +273,8 @@ input:focus {outline: none;}
 }
 #contentMain #checkedinList {
     width: 930px;
-    margin-left: 0px
+    margin-left: 0px;
+    margin-bottom: 60px;
 }
 #contentMain #checkedinList ul {
     list-style: none;
@@ -232,8 +289,15 @@ input:focus {outline: none;}
     float: none;
     clear: both;
     padding: 6px 8px 10px;
+    cursor: pointer;
     background-color: rgba(255,255,255,0.65);
-/*     border: 1px solid rgba(255,255,255,0.7); */
+}
+#contentMain #checkedinList ul li:hover {
+    background-color: rgba(255,255,255,1);
+} 
+#contentMain #checkedinList ul li .nameDisplay {
+    font-size: 14px;
+    margin-bottom: 6px;
 }
 /*
 #contentMain #checkedinList ul li img.unavail {
@@ -369,12 +433,13 @@ input:focus {outline: none;}
     cursor: pointer;
 }
 
+/*
 .unavail
 {
     opacity: 0.5;
     background-color: black;
-    /*color:#aaa;*/
 }
+*/
 
 /*_____________ Isotope styles _____________*/
 .isotope-item {
@@ -404,34 +469,50 @@ input:focus {outline: none;}
           transition-property:         transform, opacity;
 }
 
+
+
+
+
+/*_____________ table styles _____________*/
 #checkins {
-	margin: 0;
-	background: #ffffff;
-	width: 100%;
+margin: 0;
+background: #ffffff;
+width: 100%;
+margin-bottom: 60px;
 }
 .netid {
-	display: none;
+display: none;
 }
 #checkins td {
-	border-collapse: collapse;
-	padding: 0.3em 0.4em;
-	margin: 0;
+border-collapse: collapse;
+padding: 0.3em 0.4em;
+margin: 0;
 }
 #checkins tbody tr {
-	font-family: Helvetica;
-	background-color: rgba(186,217,118,0.5);
+font-family: Helvetica;
+background-color: rgba(186,217,118,0.5);
 }
 #checkins tbody tr.odd {
-	background-color: #ffffff;
+background-color: #ffffff;
 }
 .sorting_asc,
 .sorting_desc {
-	font-weight: bold;
-	color: red;
+font-weight: bold;
+color: red;
 }
 #nav {
-	position: absolute;
-	right: 0;
-	top: 2em;
-	list-style: none;
+position: absolute;
+right: 0;
+top: 2em;
+list-style: none;
+}
+#checkins_filter {
+    margin: 8px 0px;
+}
+#checkins_filter label {
+    color: #fff;
+}
+#checkins_info {
+     margin: 8px 0px;
+     color: #fff;
 }

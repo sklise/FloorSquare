@@ -60,13 +60,23 @@ var app = Sammy('#contentMain', function() {
         // console.log(json);
         //make skills an array of strings, instead of just a string
         processed_swipes= [];
+
+        
         for(i in json)
         {
+        
           swipe= json[i]
 /*
             if(typeof swipe.user.extra.app_id_4.skills == "undefined"){
                 swipe.user.extra.app_id_4.skills= swipe.user.extra.app_id_4.skills.split(",");
             }*/
+            
+         for(i in processed_swipes) {
+            if(swipe.user.last == processed_swipes[i].user.last) {
+                console.log(swipe.user.last);
+                processed_swipes.splice(i,1);
+            }
+        }
             
           if (swipe.extra.app_id_4.available=="true")
           {
@@ -88,10 +98,9 @@ var app = Sammy('#contentMain', function() {
             items = $(items);
             // $("#allStudentsBoard").isotope( 'appended', items );
             $('#allStudentsBoard').isotope('insert', items );
-            fadeUnavail();
-
+            //fadeUnavail();
         });
-    })
+    });
 
   }); // end get #/
 
@@ -226,7 +235,7 @@ var fadeUnavail = function(){
      });
 };
 
-fadeUnavail();
+//fadeUnavail();
 
 
 $("#searcher").live('focus', function() {
@@ -258,7 +267,7 @@ $("#searcher").live('blur', function() {
       // otherwise, apply new options
       $container.isotope( options );
     }
-    intervalD1=setTimeout(fadeUnavail, 300);
+    //intervalD1=setTimeout(fadeUnavail, 300);
  }
 
    $("#searcher").keypress(function(e){
@@ -271,7 +280,7 @@ $("#searcher").live('blur', function() {
     }
  });   
  
- $("#seeAll").click(function(e){
+ $("#viewAll").click(function(e){
         q = "studentBox";
         var $this = $(this);
         studentFilter(q, $this);
@@ -337,6 +346,12 @@ console.log(memberskills);
         });
 };
 
+$('.studentBox').live('click',function() {
+console.log("ntd");
+    var ntd = $(this).attr("netid");
+    console.log(ntd);
+    document.location.href="http://itp.nyu.edu/~mah593/projects_db_work/show/project_gallery_detail.php?netid="+ntd+"&venueid=84";
+});
 
  
 }); //end docready
