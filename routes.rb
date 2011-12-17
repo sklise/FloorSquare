@@ -87,7 +87,7 @@ get '/floorsquare/swipes/?' do
   # Check to see if a specific time range was queried.
   # If there was no time range specified, return only 50.
   if params[:until].nil? && params[:since].nil?
-    @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC", :limit => 50)
+    @swipes = Swipe.find(:all, :conditions => [query, conditions], :order => "created_at DESC")
   else
     # Append to query to look for swipes with `created_at` exclusive
     # less than the parameter.
