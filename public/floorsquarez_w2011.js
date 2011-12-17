@@ -2,6 +2,7 @@ var sideDetail = false;
 
 
 $(document).ready(function(){
+
 url = "http://www.itpirl.com/floorsquare";
 $container = $('#allStudentsBoard');
 
@@ -51,7 +52,7 @@ var app = Sammy('#contentMain', function() {
     setListElements(); //isotope
     setupSwipeInputOnEnter(context);
     $("#allStudentsBoard").show();
-	$("#statusMessage").show();
+    $("#statusMessage").show();
 
     // load some data
     this.send($.getJSON, url+"/swipes", { app_key: "2d92b4126baeffefdbdd90f03c571963" , device_id: '1', extra: {checkin: true}})
@@ -63,10 +64,10 @@ var app = Sammy('#contentMain', function() {
         {
           swipe= json[i]
 /*
-			if(typeof swipe.user.extra.app_id_4.skills == "undefined"){
-        		swipe.user.extra.app_id_4.skills= swipe.user.extra.app_id_4.skills.split(",");
-			}*/
-			
+            if(typeof swipe.user.extra.app_id_4.skills == "undefined"){
+                swipe.user.extra.app_id_4.skills= swipe.user.extra.app_id_4.skills.split(",");
+            }*/
+            
           if (swipe.extra.app_id_4.available=="true")
           {
             swipe.avail= "available";
@@ -94,14 +95,38 @@ var app = Sammy('#contentMain', function() {
 
   }); // end get #/
 
- // 
+    this.get('#/checkins', function(context) {
+        $('#contentMain').empty()
+        context.render('checkintable.mustache').appendTo("#contentMain");
+        this.send($.getJSON, url+"/swipes", { app_key: "2d92b4126baeffefdbdd90f03c571963", since: "2011-12-16"})
+        .then(function(json) {
+            checkins = []
+            for(i in json) {
+                console.log(json[i]);
+                checkins.push(json[i]);
+            }
+            context.renderEach('checkins.mustache',checkins).appendTo("#checkins tbody")
+            .then(function(){
+                $("#checkins").dataTable({
+                    "aaSorting": [[4,'desc']],
+                    "bAutoWidth": false,
+                    "aoColumnDefs": [
+                    {"bVisible":false, "aTargets":[0]},
+                    {"asSorting": [ "desc" ], "aTargets": [ 4 ]}
+                    ],
+                	"bPaginate": false
+                });
+            })
+        })
+    });
+
   this.get('#/checkin/:nnumber', function(context) {
    
    var nnumber=this.params['nnumber'];
    var swipeid = null;
    $("#allStudentsBoard").empty().isotope('destroy').hide();
 
-	console.log("yo");
+    console.log("yo");
 
     this.send($.ajax, url+"/swipes/new", {
         data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, }},
@@ -110,29 +135,29 @@ var app = Sammy('#contentMain', function() {
         success: function(data){
             console.log('data',data);
 
-			
+            
             // extra.app_id_4.skills= extra.app_id_4.skills.split(",");
             swipeid=data.swipeid;
             context.render('swipe.mustache', data).appendTo('#contentMain')
             .then(function(){
               // console.log('hii');
-			$(".skillLabel").hide();
-			$("#skillfield_tagsinput").hide();
-			//$('#skillfield').val('winterShow');
-			$("#statusMessage").hide();
+            $(".skillLabel").hide();
+            $("#skillfield_tagsinput").hide();
+            //$('#skillfield').val('winterShow');
+            $("#statusMessage").hide();
 
-			$('#skillfield').hide();
-	
+            $('#skillfield').hide();
+    
 
-			$("#accountForm h2").empty();
-			 $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>home</p>");
+            $("#accountForm h2").empty();
+             $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>home</p>");
               // $('#skillfield').tagsInput({
               //                width: '780',
               //                height:' 40px',
               //              });
 
 
-				
+                
               $(".submitAsAvailable").click(function() {
                  context.send($.ajax, url+"/swipes/"+swipeid, {
                         data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, available: true }},
@@ -266,7 +291,7 @@ $(document).keypress(function(e) {
       keyHistory= '';
       //send it in
       app.setLocation("#/checkin/"+nn);
-	  nn = "";
+      nn = "";
 
       return false;
       // console.log(app.get("#/checkin/"+nn));

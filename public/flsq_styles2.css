@@ -403,3 +403,35 @@ input:focus {outline: none;}
      -moz-transition-property:    -moz-transform, opacity;
           transition-property:         transform, opacity;
 }
+
+#checkins {
+	margin: 0;
+	background: #ffffff;
+	width: 100%;
+}
+.netid {
+	display: none;
+}
+#checkins td {
+	border-collapse: collapse;
+	padding: 0.3em 0.4em;
+	margin: 0;
+}
+#checkins tbody tr {
+	font-family: Helvetica;
+	background-color: rgba(186,217,118,0.5);
+}
+#checkins tbody tr.odd {
+	background-color: #ffffff;
+}
+.sorting_asc,
+.sorting_desc {
+	font-weight: bold;
+	color: red;
+}
+#nav {
+	position: absolute;
+	right: 0;
+	top: 2em;
+	list-style: none;
+}
