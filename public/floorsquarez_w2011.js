@@ -355,41 +355,6 @@ $(document).keypress(function(e) {
     }
 
     console.log(keyHistory);
-    
-    
-    var nnumber=nn;
-   var swipeid = null;
-   $("#allStudentsBoard").empty().isotope('destroy').hide();
-
-
-    this.send($.ajax, url+"/swipes/new", {
-        data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, }},
-        type: 'POST',
-        crossDomain: true,
-        success: function(data){      
-            // extra.app_id_4.skills= extra.app_id_4.skills.split(",");
-            swipeid=data.swipeid;
-            this.render('swipe.mustache', data).appendTo('#contentMain')
-            .then(function(){
-                
-                 this.send($.ajax, url+"/swipes/"+swipeid, {
-                        data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, available: true }},
-                        type: 'POST',
-                        crossDomain: true,
-                        success: function(data){
-                            console.log('sucessss');
-                            postSkills(nnumber);
-                            $(".formpage").hide();
-                            this.redirect("#/");
-                          }  //end success
-                  });  // /send ajax
-
-
-            });  // end then of initial ajax call
-
-            //and then render it here because I can't figure out sammy all the way.
-        } 
-     });
 
     
 });
