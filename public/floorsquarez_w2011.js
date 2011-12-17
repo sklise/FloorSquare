@@ -60,7 +60,6 @@ var app = Sammy('#contentMain', function() {
         // console.log(json);
         //make skills an array of strings, instead of just a string
         processed_swipes= [];
-
         
         for(i in json)
         {
@@ -380,9 +379,9 @@ console.log(memberskills);
 
 $('.studentBox').live('click',function() {
 console.log("ntd");
-    var ntd = $(this).attr("netid");
-    console.log(ntd);
-    document.location.href="http://itp.nyu.edu/~mah593/projects_db_work/show/project_gallery_detail.php?netid="+ntd+"&venueid=84";
+    var nnumber = $(this).attr("nnumber");
+    console.log(nnumber);
+    document.location.href="#/projects/"+nnumber;
 });
 
  
