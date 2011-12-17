@@ -201,7 +201,7 @@ input:focus {outline: none;}
 }
 
 #viewAll {
-    background: rgb(245,245,187) url(images/viewall.gif) repeat -10px 0;
+    background: rgb(245,245,187) url(images/viewAll.gif) repeat -10px 0;
      font-family: Quicksand, 'sans serif';
     /*display: none;*/
     float: right;
@@ -224,7 +224,7 @@ input:focus {outline: none;}
 	-webkit-border-bottom-right-radius: 3px;
 }
 #viewAll:hover {
-    background: rgb(245,245,187) url(images/viewallhover.gif) repeat -10px 0;
+    background: rgb(245,245,187) url(images/viewAllhover.gif) repeat -10px 0;
 }
 
 #header a {
