@@ -2,12 +2,12 @@
 # API. The base url is http://www.itpirl.com/floorsquare.
 
 # Define the root (http://www.itpirl.com/floorsquare)
-get '/' do
+get '/floorsquare/?' do
   response['Access-Control-Allow-Origin'] = '*'
   erb :front
 end
 
-get '/show-check-in' do
+get '/floorsquare/show-check-in' do
   @swipes = Swipe.find(:all, :conditions => ["app_id = 4"])
 
   erb :checkin
@@ -16,7 +16,7 @@ end
 #    APPS
 #---------------------------------------
 #Find all apps written with the API and display them after swipe
-get '/dashboard' do
+get '/floorsquare/dashboard' do
   # @apps = App.find(:all, :users => ["on_dashboard = true"])
   @apps = App.all
   @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
@@ -24,12 +24,12 @@ get '/dashboard' do
 end
 
 #post the swipe
-post '/dashboard' do
+post '/floorsquare/dashboard' do
   @user = User.find(:first, :conditions => ["nnumber = ?", 19663226])
-  redirect '/floorsquare/dashboard'
+  redirect '/floorsquare/floorsquare/dashboard'
 end
 
-get '/dashboard/app' do
+get '/floorsquare/dashboard/app' do
   @app = App.where(:auth_key => params[:app_key]).first
    validate_app_key @app
 
@@ -49,7 +49,7 @@ end
 #   @apps = App.all
 #   erb :select_apps
 # end
-post '/dashboard/app' do
+post '/floorsquare/dashboard/app' do
   app_ids = params[:app_ids].split(',') #find all the apps and split them up
   app_ids.each do |app_id| #go through each app and make it an app_id 
     app_id.to_i #then make app id into an integer
@@ -64,7 +64,7 @@ end
 # Paths for swipe interaction.
 
 #### Get swipes corresponding to an app.
-get '/swipes/?' do
+get '/floorsquare/swipes/?' do
   # Return as json
   content_type :json
 
@@ -122,7 +122,7 @@ get '/swipes/?' do
 end
 
 #### POST a new swipe.
-post '/swipes/new/?' do
+post '/floorsquare/swipes/new/?' do
   content_type :json
 
   # Look for an App matching the specified app_key parameter
@@ -166,7 +166,7 @@ end
 
 # Allows extra data to be added to a swipe, after the swipe occurs.
 # Makes sense from a user perspective (swipe first, then do something)
-post '/swipes/:id' do
+post '/floorsquare/swipes/:id' do
   @app = App.where(:auth_key => params[:app_key]).limit(1).first
   validate_app_key @app
 
@@ -195,7 +195,7 @@ end
 #---------------------------------------
 
 # Get all users associated with this app
-get '/members' do
+get '/floorsquare/members' do
   @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 
@@ -210,7 +210,7 @@ get '/members' do
 end
 
 # Get a specific member
-get '/members/:nnumber' do
+get '/floorsquare/members/:nnumber' do
   @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 
@@ -240,7 +240,7 @@ get '/members/:nnumber' do
 end
 
 # Get the swipes belonging to a member
-get '/members/:nnumber/swipes' do
+get '/floorsquare/members/:nnumber/swipes' do
   @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 

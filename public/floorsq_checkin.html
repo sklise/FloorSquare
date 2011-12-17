@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+	<head>
+	   <!-- floorsquare / understanding networks / itp / nyu / 2011 -->
+	   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script src="jquery.js" type="text/javascript"></script>
+		<script src="jquery.isotope.min.js" type="text/javascript"></script>
+		<script src="jquery.tagsinput.js" type="text/javascript"></script>
+		<link rel="stylesheet" style="text/css" href="flsq_styles.css">
+		<link rel="stylesheet" style="text/css" href="jquery.tagsinput.css">
+		<script type="text/javascript" src="flsq_scripts.js"></script>	
+        <script type="text/javascript">  
+           $(document).ready(function(){
+                var url = "http://www.itpirl.com";
+                $('#skillshow').tagsInput({
+            		width: 'auto',
+            		height:' 40px',
+            		interactive: false,
+            	});
+            	$('a').each(function(index) {
+            	   if($(this).text() == "x"){
+            	       $(this).hide();
+            	   }
+            	});
+            	
+                	$(".avail").click(function(){ 
+                		$.ajax({
+                			url: url+"/swipes/new",
+                			data: { user_nnumber: "123", app_id: '1', device_id: '1', app_key: "db30ad56947d8521acd0870e765a553077bd6b17",  extra: {checkin: true, }},
+                			type: 'POST',
+                			crossDomain: true,
+                			success: function(data){
+                				odata = jQuery.parseJSON(data);
+                				console.log(odata);
+/*                 				swipeid= odata.swipeid; */
+                			} 
+                		});
+                		console.log("post");
+                	});
+                	
+                	$(".getStuff").click(function(){ 
+                		console.log('gggetting json');
+                		$.getJSON(url+"/swipes", { app_id: '1', app_key: "db30ad56947d8521acd0870e765a553077bd6b17" , device_id: '1', extra: {checkin: true, available: false}},
+                		function(data){
+                			console.log(data);
+                		});
+                	});	
+            	 
+            });
+        </script>
+	</head>
+	   <div id="topBar"></div>
+	<body>
+    	<div id="page">
+    	   <div id="header">
+        	   <h1><a href="floorsq.html">&#32;</a></h1>
+        	   <div id="searchBar">
+                    <input type="text" value="search" name="search" id="searcher">
+                    <div class="divider"></div>
+                    <a class="searchButton"><span>&#32;</span></a>
+                </div>
+    	   </div> <!-- END header div -->
+    	   
+    	   <div id="content" class="checkinpage">
+    	       <div id="checkin">
+    	        <div id="greeting">
+        	           <h1>Hey Dennis Crowley! Thanks for checking in.</h1>
+            	       <img src="http://itp.nyu.edu/image.php?width=100&height=100&cropratio=1:1&image=/people_pics/flash/crowley_d_19751.jpg" alt="student" width="100" height="100"/>
+            	       <p><span>CURRENT SKILLS</span></p>
+            	       <input name="skillsh" id="skillshow" value="ruby,javascript,geolocation,telephony"/><br/>
+        	    </div>
+    	       <h2>Today's Status <a href="#" class="link avail">available</a> or <a href="#" class="link getStuff">unavailable</a> or edit skills <a href="floorsq_account.html" class="link">edit</a></h2>
+    	       </div>
+    	   </div><!-- END content checkinpage div -->
+    	   
+    	   <div id="footer">
+    	   
+            </div><!-- END footer div -->
+        </div><!-- END page div -->
+	</body>
+</html>
