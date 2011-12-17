@@ -105,7 +105,7 @@ var app = Sammy('#contentMain', function() {
   }); // end get #/
 
     this.get('#/checkins', function(context) {
-        $('#contentMain').empty()
+        $('#contentMain').empty();
         context.render('checkintable.mustache').appendTo("#contentMain");
         this.send($.getJSON, url+"/swipes", { app_key: "2d92b4126baeffefdbdd90f03c571963", since: "2011-12-16"})
         .then(function(json) {
@@ -129,8 +129,41 @@ var app = Sammy('#contentMain', function() {
         })
     });
 
+    this.get('#/projects/:nnumber', function(context) {
+        $('#contentMain').empty();
+        var nnumber = this.params['nnumber'];
+        $.ajax({
+            url: 'http://www.itpirl.com/floorsquare/members/'+nnumber+'/single?app_key=2d92b4126baeffefdbdd90f03c571963',
+            dataType: 'json',
+        })
+        .then(function(user) {
+            context.render('projectsView.mustache',user).appendTo('#contentMain');
+            console.log(user.netid);
+            var netid = user.netid;
+            $.ajax({
+             url: 'http://itp.nyu.edu/~mah593/projects_db_work/serving_scripts/get_projects_venue.php?venueid=84&netid='+netid,
+             dataType: 'jsonp',
+             success: function(data){
+             }
+            }).then(function(data) {
+
+                var mustache_magic_list = new Object();
+                var projectinfos = [];
+                for(i in data.results){
+                    console.log(data.results[i]);
+                    projectinfos.push({
+                        "title":data.results[i][1], 
+                        "pitch":data.results[i][2],
+                        "abstract":data.results[i][3],
+                        "image":data.results[i][5]
+                    });
+                }
+                context.renderEach('projects.mustache',projectinfos).appendTo("#projects");
+            });
+        })
+    });
+
   this.get('#/checkin/:nnumber', function(context) {
-   
    var nnumber=this.params['nnumber'];
    var swipeid = null;
    $("#allStudentsBoard").empty().isotope('destroy').hide();
@@ -142,10 +175,11 @@ var app = Sammy('#contentMain', function() {
         crossDomain: true,
         success: function(data){
             console.log('data',data);
-
+            $('#contentMain').empty();
             
             // extra.app_id_4.skills= extra.app_id_4.skills.split(",");
             swipeid=data.swipeid;
+
             context.render('swipe.mustache', data).appendTo('#contentMain')
             .then(function(){
               // console.log('hii');
@@ -226,7 +260,7 @@ var fadeUnavail = function(){
     $(studentImages).each(function(index) {
         if ($(this).hasClass('unavail')) {
           // console.log($(this).parent('li'));
-            $(this).parent('li').css({'background-color' : 'rgba(20,20,20,0.8)', 'opacity' : '0.5 !important', 'color' : '#aaa'});
+            // $(this).parent('li').css({'background-color' : 'rgba(20,20,20,0.8)', 'opacity' : '0.5 !important', 'color' : '#aaa'});
         }
      });
 };

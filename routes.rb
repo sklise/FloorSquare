@@ -207,8 +207,20 @@ get '/floorsquare/members' do
   @users.to_json
 end
 
+get '/floorsquare/members/:nnumber/single' do
+  content_type :json
+  @app = App.where(:auth_key => params[:app_key]).first
+  validate_app_key @app
+  
+  @user = User.where(:nnumber => params[:nnumber]).first
+  
+  response['Access-Control-Allow-Origin'] = '*'
+  @user.to_json
+end
+
 # Get a specific member
 get '/floorsquare/members/:nnumber' do
+  content_type :json
   @app = App.where(:auth_key => params[:app_key]).first
   validate_app_key @app
 
@@ -220,11 +232,14 @@ get '/floorsquare/members/:nnumber' do
     response['Access-Control-Allow-Origin'] = '*'
     throw(:halt, [404, "Member not found\n"])
   else
-    if @user.extra
-      new_extra= @user.extra["app_id_#{@app.id}"].merge(extra)
-      @user.extra = {"app_id_#{@app.id}" => new_extra }
-    else
-      @user.extra = {"app_id_#{@app.id}" => extra }
+    if not extra.nil?
+      if @user.extra
+        @user.extra["app_id_#{@app.id}"] ||= {:blank => true}
+        new_extra = @user.extra["app_id_#{@app.id}"].merge(extra)
+        @user.extra = {"app_id_#{@app.id}" => new_extra }
+      else
+        @user.extra = {"app_id_#{@app.id}" => extra }
+      end
     end
 
     if @user.save()
@@ -232,7 +247,7 @@ get '/floorsquare/members/:nnumber' do
       return @user.to_json
     else
       response['Access-Control-Allow-Origin'] = '*'
-      throw(:halt, [500, "Error saving User\n"])
+      throw(:halt, [501, "Error saving User\n"])
     end
   end
 end
