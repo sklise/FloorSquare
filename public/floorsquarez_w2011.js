@@ -133,7 +133,7 @@ var app = Sammy('#contentMain', function() {
         $('#contentMain').empty();
         var nnumber = this.params['nnumber'];
         $.ajax({
-            url: 'http://l:9292/floorsquare/members/'+nnumber+'/single?app_key=2d92b4126baeffefdbdd90f03c571963',
+            url: 'http://www.itpirl.com/floorsquare/members/'+nnumber+'/single?app_key=2d92b4126baeffefdbdd90f03c571963',
             dataType: 'json',
         })
         .then(function(user) {
