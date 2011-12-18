@@ -111,17 +111,15 @@ var app = Sammy('#contentMain', function() {
         .then(function(json) {
             checkins = []
             for(i in json) {
-                console.log(json[i]);
                 checkins.push(json[i]);
             }
             context.renderEach('checkins.mustache',checkins).appendTo("#checkins tbody")
             .then(function(){
                 $("#checkins").dataTable({
-                    "aaSorting": [[4,'desc']],
+                    "aaSorting": [[3,'desc']],
                     "bAutoWidth": false,
                     "aoColumnDefs": [
-                    {"bVisible":false, "aTargets":[0]},
-                    {"asSorting": [ "desc" ], "aTargets": [ 4 ]}
+                        {"bVisible":false, "aTargets":[0]}
                     ],
                 	"bPaginate": false
                 });
@@ -130,11 +128,13 @@ var app = Sammy('#contentMain', function() {
     });
 
     this.get('#/projects/:nnumber', function(context) {
-        $('#contentMain').empty();
         var nnumber = this.params['nnumber'];
         $.ajax({
             url: 'http://www.itpirl.com/floorsquare/members/'+nnumber+'/single?app_key=2d92b4126baeffefdbdd90f03c571963',
             dataType: 'json',
+        })
+        .then(function() {
+            $('#contentMain').empty();
         })
         .then(function(user) {
             context.render('projectsView.mustache',user).appendTo('#contentMain');
@@ -192,7 +192,7 @@ var app = Sammy('#contentMain', function() {
     
             $("#accountForm .greeting").css({'height':'110px'});
             $("#accountForm h2").empty();
-             $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>click here to check in</p>");
+            $("#accountForm h2").append("<p class='link gotoMain submitAsAvailable'>click here to check in</p>");
               // $('#skillfield').tagsInput({
               //                width: '780',
               //                height:' 40px',
@@ -200,7 +200,7 @@ var app = Sammy('#contentMain', function() {
 
 
                 
-              $(".submitAsAvailable").click(function() {
+              $(".submitAsAvailable").live('click',function() {
                  context.send($.ajax, url+"/swipes/"+swipeid, {
                         data: { user_nnumber: nnumber, app_id: '4', device_id: '1', app_key: "2d92b4126baeffefdbdd90f03c571963",  extra: {checkin: true, available: true }},
                         type: 'POST',
@@ -379,7 +379,7 @@ console.log(memberskills);
 };
 
 $('.studentBox').live('click',function() {
-console.log("ntd");
+
     var nnumber = $(this).attr("nnumber");
     console.log(nnumber);
     document.location.href="#/projects/"+nnumber;
