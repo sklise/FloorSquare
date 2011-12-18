@@ -110,7 +110,8 @@ get '/floorsquare/swipes/?' do
   # Include the associated User with each Swipe.
   swipe_response = []
   @swipes.each do |swipe|
-    swipe_response << swipe.as_json(:include => :user)
+    swipe_response << swipe.as_json(:include => :user, :methods => :time)
+    puts swipe.as_json(:include => :user, :methods => :time)
   end
 
   # Allow cross-origin json access

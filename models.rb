@@ -34,6 +34,10 @@ class Swipe < ActiveRecord::Base
   # The `extra` field is JSON which needs to be serialized
   # to save in the database.
   serialize :extra
+
+  def time
+    self.created_at.getlocal("-05:00").strftime("%d %a %H:%M")
+  end
 end
 
 class Device < ActiveRecord::Base
