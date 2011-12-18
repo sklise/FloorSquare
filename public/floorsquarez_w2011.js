@@ -122,12 +122,23 @@ var app = Sammy('#contentMain', function() {
             context.renderEach('checkins.mustache',checkins).appendTo("#checkins tbody")
             .then(function(){
                 $("#checkins").dataTable({
-                    "aaSorting": [[3,'desc']],
+                    "aaSorting": [[4,'desc']],
                     "bAutoWidth": false,
-                    "aoColumnDefs": [
-                        {"bVisible":false, "aTargets":[0]}
-                    ],
                 	"bPaginate": false
+                });
+                $('#checkins tbody tr').each(function(index) {
+                    var netid = $(this).find('td:eq(0)').text();
+                    var $self = $(this);
+                    var projectsURL = 'http://itp.nyu.edu/~mah593/projects_db_work/serving_scripts/get_projects_venue.php?venueid=84&netid='
+                    $.getJSON(projectsURL+netid+'&callback=?', function(json){
+                        for(l in json) {
+                            var projects = [];
+                            for(j in json[l]) {
+                                projects.push(json[l][j][1]);
+                            }
+                            $self.find('.project').html('<a href="#/projects/"'+1+'>'+projects.join(", ")+'</a>');
+                        }
+                    });
                 });
             })
         })
