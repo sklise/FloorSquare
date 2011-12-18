@@ -50,6 +50,9 @@ var app = Sammy('#contentMain', function() {
 
   // define a 'route' for the home page, which is the all students board
   this.get('#/', function(context) {
+    $('#searchBar').show();
+    $('#viewAll').show();
+    $('#backToAll').hide();
     setListElements(); //isotope
     setupSwipeInputOnEnter(context);
     $("#allStudentsBoard").show();
@@ -106,6 +109,9 @@ var app = Sammy('#contentMain', function() {
 
     this.get('#/checkins', function(context) {
         $('#contentMain').empty();
+        $('#searchBar').hide();
+        $('#viewAll').hide();
+        $('#backToAll').show();
         context.render('checkintable.mustache').appendTo("#contentMain");
         this.send($.getJSON, url+"/swipes", { app_key: "2d92b4126baeffefdbdd90f03c571963", since: "2011-12-16"})
         .then(function(json) {
@@ -128,6 +134,10 @@ var app = Sammy('#contentMain', function() {
     });
 
     this.get('#/projects/:nnumber', function(context) {
+        $('#contentMain').empty();
+         $('#searchBar').hide();
+        $('#viewAll').hide();
+        $('#backToAll').show();
         var nnumber = this.params['nnumber'];
         $.ajax({
             url: 'http://www.itpirl.com/floorsquare/members/'+nnumber+'/single?app_key=2d92b4126baeffefdbdd90f03c571963',
@@ -150,13 +160,14 @@ var app = Sammy('#contentMain', function() {
                 var mustache_magic_list = new Object();
                 var projectinfos = [];
                 for(i in data.results){
-                    console.log(data.results[i]);
                     projectinfos.push({
                         "title":data.results[i][1], 
                         "pitch":data.results[i][2],
                         "abstract":data.results[i][3],
                         "image":data.results[i][5]
                     });
+                     
+                    projectinfos[i].abstract = projectinfos[i].abstract.replace(/(<|&lt;)br *\/(>|&gt;)/g, "");
                 }
                 context.renderEach('projects.mustache',projectinfos).appendTo("#projects");
             });
@@ -314,9 +325,14 @@ $("#searcher").live('blur', function() {
         q = "studentBox";
         var $this = $(this);
         studentFilter(q, $this);
+         var pathname = $(location).attr('href');
         return false;
  });   
-
+ $("#backToAll").click(function(e){
+        document.location.href="http://www.itpirl.com/floorsquare_winter2011.html#/";
+        return false;
+ }); 
+ 
 var keyHistory = '';
 var gettingNnumber=false;
 var nn='';

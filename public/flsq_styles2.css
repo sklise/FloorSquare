@@ -86,7 +86,7 @@ a {
     width: 100%;
     margin-top: 0px;
     padding: 14px 0px 10px;
-    height: 60px;
+    height: 36px;
     color: silver;
     background-color: #fff;
     z-index: 10;
@@ -226,6 +226,33 @@ input:focus {outline: none;}
 #viewAll:hover {
     background: rgb(245,245,187) url(images/viewAllhover.gif) repeat -10px 0;
 }
+#backToAll {
+    background: rgb(245,245,187) url(images/viewall.gif) repeat -10px 0;
+     font-family: Quicksand, 'sans serif';
+    /*display: none;*/
+    float: right;
+    height: 30px;
+    padding: 0px 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    line-height: 30px;
+   /*  margin-top: -48px; */
+   margin-top: 2px;
+    border-top: #222 solid 2px;
+    border-right: #222 solid 2px;
+    border-bottom: #222 solid 2px;
+    border-left: #222 solid 2px;
+    -moz-border-radius: 3px 3px 3px 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-bottom-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+	-webkit-border-bottom-right-radius: 3px;
+	display: none;
+}
+#backToAll:hover {
+    background: rgb(245,245,187) url(images/viewallhover.gif) repeat -10px 0;
+}
 
 #header a {
     text-decoration: none;
@@ -236,19 +263,39 @@ input:focus {outline: none;}
     padding: 14px 30px 30px;
     background-color: none;
     border: none;
+    margin-bottom: 60px;
 }
 .content {
     margin-top: 26px;
     padding: 30px;
     /* background-color: #fff; */
 }
-.content #accountForm .greeting {
+#contentMain .greeting {
     padding: 30px 30px 26px;
     background-color: #fff;
     margin-bottom: 20px;
     width: 790px;
 }
-
+#contentMain .studentName {
+    color: #fff;
+    font-size: 34px;
+    margin-bottom: 8px;
+}
+#contentMain .studentImage {
+    border: 4px solid #fff;
+}
+.content #accountForm .greeting {
+    padding: 30px 30px 26px;
+    background-color: #fff;
+    margin-bottom: 20px;
+    width: 790px;
+    clear: both;
+}
+#contentMain .greeting h2,
+#contentMain .greeting p,
+#contentMain .greeting .abstract {
+font-family: Helvetica;
+}
 .content #accountForm .setStatus {
     margin-top: 24px;
     margin-left: 30px;
@@ -274,7 +321,6 @@ input:focus {outline: none;}
 #contentMain #checkedinList {
     width: 930px;
     margin-left: 0px;
-    margin-bottom: 60px;
 }
 #contentMain #checkedinList ul {
     list-style: none;
@@ -432,6 +478,9 @@ input:focus {outline: none;}
 	-webkit-border-radius: 3px;
     cursor: pointer;
 }
+#projects img {
+    margin: 10px 0px;
+}
 
 /*
 .unavail
@@ -515,4 +564,13 @@ list-style: none;
 #checkins_info {
      margin: 8px 0px;
      color: #fff;
+}
+#checkins .sorting {
+    background: url(images/arrowLeft.png) no-repeat top right;
+}
+#checkins .sorting_desc {
+    background: url(images/arrowUp.png) no-repeat top right;
+}
+#checkins .sorting_asc {
+    background: url(images/arrowDown.png) no-repeat top right;
 }
